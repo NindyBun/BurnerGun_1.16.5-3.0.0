@@ -30,3 +30,6 @@
 ### v3.0.0
 - Completely reworked from previous versions
 - Is subject to future changes
+### v3.1.0
+- Added block highlighting
+- Added 5 tiers of the Ambience upgrade
