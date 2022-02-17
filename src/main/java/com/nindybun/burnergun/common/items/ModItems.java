@@ -2,15 +2,11 @@ package com.nindybun.burnergun.common.items;
 
 import com.nindybun.burnergun.common.BurnerGun;
 import com.nindybun.burnergun.common.blocks.ModBlocks;
-import com.nindybun.burnergun.common.entities.MegaBlazeSummonEntity;
-import com.nindybun.burnergun.common.entities.ModEntities;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.common.items.upgrades.Auto_Smelt.AutoSmelt;
 import com.nindybun.burnergun.common.items.upgrades.Trash.Trash;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
-import com.nindybun.burnergun.common.items.upgrades.Upgrade_Bag.UpgradeBag;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
@@ -55,7 +51,7 @@ public class ModItems {
     public static final RegistryObject<Item> TRASH = UPGRADE_ITEMS.register("trash_upgrade", () -> new Trash(Upgrade.TRASH));
     //public static final RegistryObject<Item> UPGRADE_BAG = UPGRADE_ITEMS.register("upgrade_bag", () -> new UpgradeBag(Upgrade.UPGRADE_BAG));
     //public static final RegistryObject<Item> UNIFUEL = UPGRADE_ITEMS.register("unifuel", Upgrade.UNIFUEL::getCard);
-    public static final RegistryObject<Item> AMBIENCE = UPGRADE_ITEMS.register("ambience", Upgrade.AMBIENCE::getCard);
+    public static final RegistryObject<Item> AMBIENCE = UPGRADE_ITEMS.register("ambience_1", Upgrade.AMBIENCE_1::getCard);
     //public static final RegistryObject<Item> REACTOR = UPGRADE_ITEMS.register("reactor", Upgrade.REACTOR::getCard);
 
     public static final RegistryObject<Item> FORTUNE_1 = UPGRADE_ITEMS.register("fortune_1_upgrade", Upgrade.FORTUNE_1::getCard);

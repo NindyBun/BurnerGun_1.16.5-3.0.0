@@ -1,29 +1,19 @@
 package com.nindybun.burnergun.common.items.burnergunmk1;
 
-import com.google.common.collect.Sets;
 import com.nindybun.burnergun.client.Keybinds;
 import com.nindybun.burnergun.common.blocks.Light;
 import com.nindybun.burnergun.common.blocks.ModBlocks;
 import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
 import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2InfoProvider;
-import com.nindybun.burnergun.common.items.upgrades.Auto_Fuel.AutoFuel;
-import com.nindybun.burnergun.common.items.upgrades.Trash.Trash;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
-import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
 import com.nindybun.burnergun.util.UpgradeUtil;
 import com.nindybun.burnergun.util.WorldUtil;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -31,7 +21,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,7 +33,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.Dimension;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -58,15 +46,11 @@ import net.minecraftforge.items.IItemHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Supplier;
 
 public class BurnerGunMK1 extends Item{
     private static final double base_use = 100;
@@ -82,9 +66,9 @@ public class BurnerGunMK1 extends Item{
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         IItemHandler handler = getHandler(stack);
-        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE.getCard().getItem())){
+        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())){
             tooltip.add(new StringTextComponent("Feed me fuel!").withStyle(TextFormatting.YELLOW));
-        }else if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE.getCard().getItem())){
+        }else if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())){
             tooltip.add(new StringTextComponent("Collecting heat from nearby sources!").withStyle(TextFormatting.YELLOW));
         }
         tooltip.add(new StringTextComponent("Press " + GLFW.glfwGetKeyName(Keybinds.burnergun_gui_key.getKey().getValue(), GLFW.glfwGetKeyScancode(Keybinds.burnergun_gui_key.getKey().getValue())).toUpperCase() + " to open GUI").withStyle(TextFormatting.GRAY));
@@ -167,7 +151,7 @@ public class BurnerGunMK1 extends Item{
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void refuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player){
         IItemHandler handler = getHandler(stack);
-        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE.getCard().getItem())) {
+        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())) {
             while (handler.getStackInSlot(0).getCount() > 0){
                 if (info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > base_use_buffer)
                     break;
@@ -181,7 +165,7 @@ public class BurnerGunMK1 extends Item{
     }
 
     public void useFuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player, List<Upgrade> upgrades){
-        if (!getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE.getCard().getItem()))
+        if (!getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem()))
             refuel(info, stack, player);
         info.setFuelValue(info.getFuelValue() - getUseValue(upgrades));
     }
@@ -290,7 +274,7 @@ public class BurnerGunMK1 extends Item{
         boolean heldgun = ((PlayerEntity)entity).getMainHandItem().getItem() instanceof BurnerGunMK1 || ((PlayerEntity)entity).getOffhandItem().getItem() instanceof BurnerGunMK1 ? true : false;
         if (heldgun && entity instanceof PlayerEntity && stack.getItem() instanceof BurnerGunMK1){
             IItemHandler handler = getHandler(stack);
-            if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE.getCard().getItem())){
+            if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())){
                 BurnerGunMK1Info info = getInfo(stack);
                 if (info.getFuelValue() < base_use_buffer && world.getMaxLocalRawBrightness((entity.blockPosition())) >= 8)
                     info.setFuelValue(info.getFuelValue()+1.0);

@@ -2,6 +2,6 @@
   "parent": "item/generated",
   "textures":
   {
-    "layer0": "burnergun:items/ambience"
+    "layer0": "burnergun:items/ambience_1"
   }
 }

@@ -43,7 +43,7 @@ public enum Upgrade {
     AUTO_SMELT("auto_smelt", -1, 50 + (int)(Math.random() * ((175 - 50) + 1)), 1, 0, true),
     TRASH("trash", -1, 75, 1, 0, true),
     UPGRADE_BAG("upgrade_bag", -1, 0, 1, 0, false),
-    AMBIENCE("ambience", -1, 0, 1, 0, false),
+    AMBIENCE_1("ambience_1", 1, 0, 1, 1, false),
 
     AUTO_FUEL("auto_fuel", -1, 0, 1, 0, true),
     UNIFUEL("unifuel", -1, 0, 1, 0, false),
