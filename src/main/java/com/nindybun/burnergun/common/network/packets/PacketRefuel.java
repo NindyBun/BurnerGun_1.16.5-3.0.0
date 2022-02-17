@@ -40,7 +40,12 @@ public class PacketRefuel {
                 IItemHandler handler = BurnerGunMK1.getHandler(gun);
                 BurnerGunMK1Info info = BurnerGunMK1.getInfo(gun);
                 ItemStack stack = handler.getStackInSlot(0);
-                if (stack == ItemStack.EMPTY || stack.getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem()))
+                if (stack == ItemStack.EMPTY
+                        || stack.getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
+                        || stack.getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
+                        || stack.getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
+                        || stack.getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
+                        || stack.getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem()))
                     return;
                 while (handler.getStackInSlot(0).getCount() > 0){
                     if (info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > BurnerGunMK1.base_use_buffer)

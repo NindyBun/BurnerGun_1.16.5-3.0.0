@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "igi",
+    "gog",
+    "hfh"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "h": {
+      "item": "minecraft:iron_block"
+    },
+    "o": {
+      "item": "burnergun:ambience_2"
+    },
+    "f": {
+      "item": "burnergun:base_tier_3"
+    },
+    "g": {
+      "item": "minecraft:bricks"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:ambience_3",
+    "count": 1
+  }
+}

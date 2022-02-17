@@ -51,7 +51,12 @@ public class ModItems {
     public static final RegistryObject<Item> TRASH = UPGRADE_ITEMS.register("trash_upgrade", () -> new Trash(Upgrade.TRASH));
     //public static final RegistryObject<Item> UPGRADE_BAG = UPGRADE_ITEMS.register("upgrade_bag", () -> new UpgradeBag(Upgrade.UPGRADE_BAG));
     //public static final RegistryObject<Item> UNIFUEL = UPGRADE_ITEMS.register("unifuel", Upgrade.UNIFUEL::getCard);
-    public static final RegistryObject<Item> AMBIENCE = UPGRADE_ITEMS.register("ambience_1", Upgrade.AMBIENCE_1::getCard);
+    public static final RegistryObject<Item> AMBIENCE_1 = UPGRADE_ITEMS.register("ambience_1", Upgrade.AMBIENCE_1::getCard);
+    public static final RegistryObject<Item> AMBIENCE_2 = UPGRADE_ITEMS.register("ambience_2", Upgrade.AMBIENCE_2::getCard);
+    public static final RegistryObject<Item> AMBIENCE_3 = UPGRADE_ITEMS.register("ambience_3", Upgrade.AMBIENCE_3::getCard);
+    public static final RegistryObject<Item> AMBIENCE_4 = UPGRADE_ITEMS.register("ambience_4", Upgrade.AMBIENCE_4::getCard);
+    public static final RegistryObject<Item> AMBIENCE_5 = UPGRADE_ITEMS.register("ambience_5", Upgrade.AMBIENCE_5::getCard);
+
     //public static final RegistryObject<Item> REACTOR = UPGRADE_ITEMS.register("reactor", Upgrade.REACTOR::getCard);
 
     public static final RegistryObject<Item> FORTUNE_1 = UPGRADE_ITEMS.register("fortune_1_upgrade", Upgrade.FORTUNE_1::getCard);

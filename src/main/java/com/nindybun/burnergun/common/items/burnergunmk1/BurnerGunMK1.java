@@ -6,6 +6,7 @@ import com.nindybun.burnergun.common.blocks.ModBlocks;
 import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
 import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
+import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
 import com.nindybun.burnergun.util.UpgradeUtil;
 import com.nindybun.burnergun.util.WorldUtil;
 import net.minecraft.block.BlockState;
@@ -66,9 +67,17 @@ public class BurnerGunMK1 extends Item{
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         IItemHandler handler = getHandler(stack);
-        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())){
+        if (       !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem())){
             tooltip.add(new StringTextComponent("Feed me fuel!").withStyle(TextFormatting.YELLOW));
-        }else if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())){
+        }else if (  handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem())){
             tooltip.add(new StringTextComponent("Collecting heat from nearby sources!").withStyle(TextFormatting.YELLOW));
         }
         tooltip.add(new StringTextComponent("Press " + GLFW.glfwGetKeyName(Keybinds.burnergun_gui_key.getKey().getValue(), GLFW.glfwGetKeyScancode(Keybinds.burnergun_gui_key.getKey().getValue())).toUpperCase() + " to open GUI").withStyle(TextFormatting.GRAY));
@@ -151,7 +160,11 @@ public class BurnerGunMK1 extends Item{
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void refuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player){
         IItemHandler handler = getHandler(stack);
-        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())) {
+        if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
+                && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem())) {
             while (handler.getStackInSlot(0).getCount() > 0){
                 if (info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > base_use_buffer)
                     break;
@@ -165,7 +178,11 @@ public class BurnerGunMK1 extends Item{
     }
 
     public void useFuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player, List<Upgrade> upgrades){
-        if (!getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem()))
+        if (!getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
+                && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
+                && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
+                && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
+                && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem()))
             refuel(info, stack, player);
         info.setFuelValue(info.getFuelValue() - getUseValue(upgrades));
     }
@@ -274,10 +291,14 @@ public class BurnerGunMK1 extends Item{
         boolean heldgun = ((PlayerEntity)entity).getMainHandItem().getItem() instanceof BurnerGunMK1 || ((PlayerEntity)entity).getOffhandItem().getItem() instanceof BurnerGunMK1 ? true : false;
         if (heldgun && entity instanceof PlayerEntity && stack.getItem() instanceof BurnerGunMK1){
             IItemHandler handler = getHandler(stack);
-            if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())){
+            if (handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
+                    || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem())){
                 BurnerGunMK1Info info = getInfo(stack);
-                if (info.getFuelValue() < base_use_buffer && world.getMaxLocalRawBrightness((entity.blockPosition())) >= 8)
-                    info.setFuelValue(info.getFuelValue()+1.0);
+                if (info.getFuelValue()+((UpgradeCard)handler.getStackInSlot(0).getItem()).getUpgrade().getExtraValue() < base_use_buffer && world.getMaxLocalRawBrightness((entity.blockPosition())) >= 8)
+                    info.setFuelValue(info.getFuelValue()+((UpgradeCard)handler.getStackInSlot(0).getItem()).getUpgrade().getExtraValue());
             }
         }
     }

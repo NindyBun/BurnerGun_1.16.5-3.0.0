@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "hgh",
+    "gog",
+    "hfh"
+  ],
+  "key": {
+    "h": {
+      "item": "minecraft:iron_block"
+    },
+    "o": {
+      "item": "burnergun:ambience_3"
+    },
+    "f": {
+      "item": "burnergun:base_tier_4"
+    },
+    "g": {
+      "item": "minecraft:bricks"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:ambience_4",
+    "count": 1
+  }
+}
