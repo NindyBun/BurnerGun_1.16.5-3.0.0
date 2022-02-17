@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ooo",
+    "ooo",
+    "ooo"
+  ],
+  "key": {
+    "o": {
+      "item": "burnergun:caged_blaze"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:condensed_blaze_1",
+    "count": 1
+  }
+}

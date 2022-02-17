@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ici",
+    "gbg",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:gems/diamond"
+    },
+    "g": {
+      "item": "minecraft:diamond_block"
+    },
+    "b": {
+      "item": "burnergun:base_tier_4"
+    },
+    "c": {
+      "tag": "forge:dyes/purple"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:base_tier_5",
+    "count": 1
+  }
+}

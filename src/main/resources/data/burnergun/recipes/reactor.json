@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "isi",
+    "ufu",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "u": {
+      "item": "minecraft:ender_pearl"
+    },
+    "s": {
+      "item": "burnergun:glittering_diamond"
+    },
+    "f": {
+      "item": "burnergun:base_tier_3"
+    },
+    "g": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:reactor",
+    "count": 1
+  }
+}

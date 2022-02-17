@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "igi",
+    "gfg",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "f": {
+      "item": "burnergun:base_tier_3"
+    },
+    "g": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:upgrade_bag",
+    "count": 1
+  }
+}

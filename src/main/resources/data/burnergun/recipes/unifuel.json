@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "isi",
+    "ufu",
+    "iui"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "s": {
+      "item": "minecraft:dragon_breath"
+    },
+    "f": {
+      "item": "burnergun:base_tier_5"
+    },
+    "u": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:unifuel",
+    "count": 1
+  }
+}

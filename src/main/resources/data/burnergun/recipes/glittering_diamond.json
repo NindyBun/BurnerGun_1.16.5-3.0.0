@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " b ",
+    "bdb",
+    " b "
+  ],
+  "key": {
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "b": {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:glittering_diamond",
+    "count": 1
+  }
+}

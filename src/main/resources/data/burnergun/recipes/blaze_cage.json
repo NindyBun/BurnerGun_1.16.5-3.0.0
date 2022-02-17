@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ooo",
+    "o o",
+    "uuu"
+  ],
+  "key": {
+    "o": {
+      "item": "minecraft:iron_bars"
+    },
+    "u": {
+      "tag": "forge:stone"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:blaze_cage",
+    "count": 1
+  }
+}

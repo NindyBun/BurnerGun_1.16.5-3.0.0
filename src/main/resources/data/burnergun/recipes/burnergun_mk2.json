@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "idg",
+    "rfg",
+    "isg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:netherite_block"
+    },
+    "i": {
+      "item": "minecraft:end_rod"
+    },
+    "s": {
+      "item": "minecraft:stone_button"
+    },
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "f": {
+      "item": "burnergun:condensed_blaze_5"
+    },
+    "r": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:burnergun_mk2",
+    "count": 1
+  }
+}

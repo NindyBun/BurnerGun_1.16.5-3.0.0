@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "iri",
+    "gtg",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/gold"
+    },
+    "g": {
+      "item": "minecraft:diamond_block"
+    },
+    "r": {
+      "item": "burnergun:heat_efficiency_3_upgrade"
+    },
+    "t": {
+      "item": "burnergun:base_tier_4"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:heat_efficiency_4_upgrade",
+    "count": 1
+  }
+}

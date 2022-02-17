@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "igi",
+    "ufh",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "u": {
+      "item": "minecraft:redstone_block"
+    },
+    "h": {
+      "item": "minecraft:lapis_block"
+    },
+    "f": {
+      "item": "burnergun:base_tier_2"
+    },
+    "g": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "result":
+  {
+    "item": "burnergun:magnet_upgrade",
+    "count": 1
+  }
+}
