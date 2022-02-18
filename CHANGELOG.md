@@ -33,3 +33,5 @@
 ### v3.1.0
 - Added block highlighting
 - Added 5 tiers of the Ambience upgrade
+### v3.1.1
+- Fixed an issue with the vertical and horizontal area not working properly after a few turns
