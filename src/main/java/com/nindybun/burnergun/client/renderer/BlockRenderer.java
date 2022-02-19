@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -76,7 +78,7 @@ public class BlockRenderer {
         int xRad = infoMK1 != null ? infoMK1.getHorizontal() : infoMK2.getHorizontal();
         int yRad = infoMK1 != null ? infoMK1.getVertical() : infoMK2.getVertical();
         BlockPos aimedPos = ray.getBlockPos();
-        if (player.level.getBlockState(aimedPos) == Blocks.AIR.defaultBlockState() || player.level.getBlockState(aimedPos).getFluidState().isSource())
+        if (player.level.getBlockState(aimedPos) == Blocks.AIR.defaultBlockState() || player.level.getBlockState(aimedPos).getFluidState().getAmount() > 0)
             return;
         Vector3d size = WorldUtil.getDim(ray, xRad, yRad, player);
         float[] color = new float[3];
