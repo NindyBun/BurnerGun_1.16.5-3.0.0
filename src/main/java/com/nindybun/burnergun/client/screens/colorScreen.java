@@ -83,7 +83,7 @@ public class colorScreen extends Screen implements Slider.ISlider {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if( redSlider.isMouseOver(mouseX, mouseY) ) {
-            redSlider.sliderValue += (.01f * (delta > 0 ? 1 : -1));
+            redSlider.sliderValue += (delta > 0 ? 1 : -1);
             redSlider.updateSlider();
         }
         if( greenSlider.isMouseOver(mouseX, mouseY) ) {

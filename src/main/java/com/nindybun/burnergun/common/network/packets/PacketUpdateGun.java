@@ -169,11 +169,11 @@ public class PacketUpdateGun {
                     if (infoMK1 != null){
                         if (infoMK1.getHorizontal() > upgrade.getTier())
                             infoMK1.setHorizontal(upgrade.getTier());
-                        infoMK1.setHorizontal(upgrade.getTier());
+                        infoMK1.setMaxHorizontal(upgrade.getTier());
                     }else{
                         if (infoMK2.getHorizontal() > upgrade.getTier())
                             infoMK2.setHorizontal(upgrade.getTier());
-                        infoMK2.setHorizontal(upgrade.getTier());
+                        infoMK2.setMaxHorizontal(upgrade.getTier());
                     }
                 }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.HORIZONTAL_EXPANSION_1)){
                     if (infoMK1 != null){

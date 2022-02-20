@@ -18,10 +18,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -78,9 +75,7 @@ public class BlockRenderer {
         int xRad = infoMK1 != null ? infoMK1.getHorizontal() : infoMK2.getHorizontal();
         int yRad = infoMK1 != null ? infoMK1.getVertical() : infoMK2.getVertical();
         BlockPos aimedPos = ray.getBlockPos();
-        if (    player.level.getBlockState(aimedPos) == Blocks.AIR.defaultBlockState()
-                || player.level.getBlockState(aimedPos) == Blocks.CAVE_AIR.defaultBlockState()
-                || player.level.getBlockState(aimedPos).getFluidState().getAmount() > 0)
+        if (ray.getType() != RayTraceResult.Type.BLOCK)
             return;
         Vector3d size = WorldUtil.getDim(ray, xRad, yRad, player);
         float[] color = new float[3];
@@ -95,7 +90,7 @@ public class BlockRenderer {
             for (int yPos = aimedPos.getY() - (int)size.y(); yPos <= aimedPos.getY() + (int)size.y(); ++yPos){
                 for (int zPos = aimedPos.getZ() - (int)size.z(); zPos <= aimedPos.getZ() + (int)size.z(); ++zPos){
                     BlockPos thePos = new BlockPos(xPos, yPos, zPos);
-                    if (thePos != aimedPos && player.level.getBlockState(thePos) != Blocks.AIR.defaultBlockState())
+                    if (thePos != aimedPos && player.level.getBlockState(thePos) != Blocks.AIR.defaultBlockState() && player.level.getBlockState(thePos) != Blocks.CAVE_AIR.defaultBlockState())
                         drawBoundingBoxAtBlockPos(matrixStack, test, color[0], color[1], color[2], 1.0F, thePos, aimedPos);
                 }
             }

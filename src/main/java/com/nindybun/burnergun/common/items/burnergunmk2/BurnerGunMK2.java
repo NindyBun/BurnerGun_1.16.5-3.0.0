@@ -141,11 +141,12 @@ public class BurnerGunMK2 extends Item {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public boolean canMine(World world, BlockPos pos, BlockState state, PlayerEntity player){
-        if (state.getDestroySpeed(world, pos) == -1 || state.getBlock() instanceof Light
+        if (    state.getDestroySpeed(world, pos) == -1
+                || state.getBlock() instanceof Light
                 || !world.mayInteract(player, pos) || !player.mayBuild()
                 || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player))
-                ||  state.getBlock().equals(Blocks.AIR.defaultBlockState())
-                ||  state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()))
+                || state.getBlock().equals(Blocks.AIR.defaultBlockState())
+                || state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()))
             return false;
         return true;
     }
