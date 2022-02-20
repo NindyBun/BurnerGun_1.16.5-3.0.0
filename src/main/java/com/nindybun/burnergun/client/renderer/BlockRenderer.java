@@ -76,6 +76,7 @@ public class BlockRenderer {
         int xRad = infoMK1 != null ? infoMK1.getHorizontal() : infoMK2.getHorizontal();
         int yRad = infoMK1 != null ? infoMK1.getVertical() : infoMK2.getVertical();
         BlockPos aimedPos = ray.getBlockPos();
+        LOGGER.info(player.level.getBlockState(aimedPos));
         if (player.level.getBlockState(aimedPos) == Blocks.AIR.defaultBlockState() || player.level.getBlockState(aimedPos).getFluidState().isSource())
             return;
         Vector3d size = WorldUtil.getDim(ray, xRad, yRad, player);
