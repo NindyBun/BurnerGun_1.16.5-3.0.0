@@ -11,6 +11,7 @@ import com.nindybun.burnergun.util.UpgradeUtil;
 import com.nindybun.burnergun.util.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
@@ -142,7 +143,9 @@ public class BurnerGunMK2 extends Item {
     public boolean canMine(World world, BlockPos pos, BlockState state, PlayerEntity player){
         if (state.getDestroySpeed(world, pos) == -1 || state.getBlock() instanceof Light
                 || !world.mayInteract(player, pos) || !player.mayBuild()
-                || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)))
+                || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player))
+                ||  state.getBlock().equals(Blocks.AIR.defaultBlockState())
+                ||  state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()))
             return false;
         return true;
     }

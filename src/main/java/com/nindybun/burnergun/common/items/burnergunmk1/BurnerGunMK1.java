@@ -200,7 +200,8 @@ public class BurnerGunMK1 extends Item{
                 || !world.mayInteract(player, pos) || !player.mayBuild()
                 || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player))
                 || info.getFuelValue() < getUseValue(upgrades)
-                ||  state.getBlock().equals(Blocks.AIR))
+                ||  state.getBlock().equals(Blocks.AIR.defaultBlockState())
+                ||  state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()))
             return false;
         return true;
     }
