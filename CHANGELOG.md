@@ -35,3 +35,5 @@
 - Added 5 tiers of the Ambience upgrade
 ### v3.1.1
 - Fixed an issue with the vertical and horizontal area not working properly after a few turns
+### v3.1.2
+- Fixes an issue where the block highlighting will also highlight flowing fluids
