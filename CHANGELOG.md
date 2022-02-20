@@ -37,3 +37,5 @@
 - Fixed an issue with the vertical and horizontal area not working properly after a few turns
 ### v3.1.2
 - Fixes an issue where the block highlighting will also highlight flowing fluids
+## v3.1.3
+- Block higlighted cave air...CAVE AIR?
