@@ -196,15 +196,7 @@ public class BurnerGunMK1 extends Item{
     }
 
     public boolean canMine(World world, BlockPos pos, BlockState state, PlayerEntity player, BurnerGunMK1Info info, List<Upgrade> upgrades){
-        LOGGER.info(state.getDestroySpeed(world, pos));
-        LOGGER.info(state.getBlock() instanceof Light);
-        LOGGER.info(world.mayInteract(player, pos));
-        LOGGER.info(player.mayBuild());
-        LOGGER.info(MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)));
-        LOGGER.info(info.getFuelValue() < getUseValue(upgrades));
-        LOGGER.info(state.getBlock().equals(Blocks.AIR.defaultBlockState()));
-        LOGGER.info(state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()));
-        if (    state.getDestroySpeed(world, pos) == -1
+        if (    state.getDestroySpeed(world, pos) <= 0
                 || state.getBlock() instanceof Light
                 || !world.mayInteract(player, pos) || !player.mayBuild()
                 || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player))
@@ -245,7 +237,6 @@ public class BurnerGunMK1 extends Item{
     }
 
     public void mineBlock(World world, BlockRayTraceResult ray, ItemStack gun, BurnerGunMK1Info info, List<Upgrade> activeUpgrades, List<Item> smeltFilter, List<Item> trashFilter, BlockPos blockPos, BlockState blockState, PlayerEntity player){
-        //LOGGER.info(canMine(world, blockPos, blockState, player, info, activeUpgrades));
         if (canMine(world, blockPos, blockState, player, info, activeUpgrades)){
             useFuel(info, gun, player, activeUpgrades);
             List<ItemStack> blockDrops = blockState.getDrops(new LootContext.Builder((ServerWorld) world)

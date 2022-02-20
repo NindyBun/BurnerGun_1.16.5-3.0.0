@@ -39,3 +39,4 @@
 - Fixes an issue where the block highlighting will also highlight flowing fluids
 ## v3.1.3
 - Block higlighted cave air...CAVE AIR?
+- Fuel was used on air blocks
