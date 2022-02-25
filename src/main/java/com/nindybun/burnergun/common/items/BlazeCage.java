@@ -24,7 +24,7 @@ public class BlazeCage extends Item {
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
         if (!player.level.isClientSide){
-            if(entity.getEntity().isAlive() && entity.getType().equals(EntityType.PIG)){
+            if(entity.getEntity().isAlive() && entity.getType().equals(EntityType.BLAZE)){
                 player.getItemInHand(hand).shrink(1);
                 if (player.getItemInHand(hand).isEmpty()){
                     IItemHandler playerHandler = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
