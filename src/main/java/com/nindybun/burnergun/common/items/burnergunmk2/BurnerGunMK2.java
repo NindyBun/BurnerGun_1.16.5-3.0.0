@@ -31,6 +31,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -141,13 +142,13 @@ public class BurnerGunMK2 extends Item {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public boolean canMine(World world, BlockPos pos, BlockState state, PlayerEntity player){
-        if (    state.getDestroySpeed(world, pos) <= 0
+        if (    state.getDestroySpeed(world, pos) < 0
                 || state.getBlock() instanceof Light
                 || !world.mayInteract(player, pos)
-                || !player.mayBuild()
-                || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player))
                 || state.getBlock().equals(Blocks.AIR.defaultBlockState())
-                || state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()))
+                || state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState())
+                || (!state.getFluidState().isEmpty() && !state.hasProperty(BlockStateProperties.WATERLOGGED))
+                || world.isEmptyBlock(pos))
             return false;
         return true;
     }

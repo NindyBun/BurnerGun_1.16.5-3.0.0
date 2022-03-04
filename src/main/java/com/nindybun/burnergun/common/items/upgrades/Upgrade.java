@@ -45,9 +45,9 @@ public enum Upgrade {
     UPGRADE_BAG("upgrade_bag", -1, 0, 1, 0, false),
     AMBIENCE_1("ambience_1", 1, 0, 1, 1, false),
     AMBIENCE_2("ambience_2", 1, 0, 1, 2, false),
-    AMBIENCE_3("ambience_3", 1, 0, 1, 4, false),
-    AMBIENCE_4("ambience_4", 1, 0, 1, 6, false),
-    AMBIENCE_5("ambience_5", 1, 0, 1, 8, false),
+    AMBIENCE_3("ambience_3", 1, 0, 1, 6, false),
+    AMBIENCE_4("ambience_4", 1, 0, 1, 24, false),
+    AMBIENCE_5("ambience_5", 1, 0, 1, 120, false),
 
     AUTO_FUEL("auto_fuel", -1, 0, 1, 0, true),
     UNIFUEL("unifuel", -1, 0, 1, 0, false),

@@ -15,14 +15,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.debug.CollisionBoxDebugRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.ICollisionReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.Tags;
@@ -82,6 +85,7 @@ public class BlockRenderer {
         color[0] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Red") : infoMK2.getColor().getCompound(0).getFloat("Red");
         color[1] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Green") : infoMK2.getColor().getCompound(0).getFloat("Green");
         color[2] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Blue") : infoMK2.getColor().getCompound(0).getFloat("Blue");
+        test = player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds();
         drawBoundingBoxAtBlockPos(matrixStack, test, color[0], color[1], color[2], 1.0F, aimedPos.relative(ray.getDirection()), aimedPos.relative(ray.getDirection()));
         drawBoundingBoxAtBlockPos(matrixStack, test, color[0], color[1], color[2], 1.0F, aimedPos, aimedPos.relative(ray.getDirection()));
         if (player.isCrouching())
@@ -91,7 +95,7 @@ public class BlockRenderer {
                 for (int zPos = aimedPos.getZ() - (int)size.z(); zPos <= aimedPos.getZ() + (int)size.z(); ++zPos){
                     BlockPos thePos = new BlockPos(xPos, yPos, zPos);
                     if (thePos != aimedPos && player.level.getBlockState(thePos) != Blocks.AIR.defaultBlockState() && player.level.getBlockState(thePos) != Blocks.CAVE_AIR.defaultBlockState())
-                        drawBoundingBoxAtBlockPos(matrixStack, test, color[0], color[1], color[2], 1.0F, thePos, aimedPos);
+                        drawBoundingBoxAtBlockPos(matrixStack, player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds(), color[0], color[1], color[2], 1.0F, thePos, aimedPos);
                 }
             }
         }

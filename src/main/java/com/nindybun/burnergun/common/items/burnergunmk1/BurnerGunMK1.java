@@ -25,6 +25,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -55,7 +56,7 @@ import java.util.Optional;
 
 public class BurnerGunMK1 extends Item{
     private static final double base_use = 100;
-    public static final double base_use_buffer = 10_000;
+    public static final double base_use_buffer = 20_000;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final IRecipeType<? extends AbstractCookingRecipe> RECIPE_TYPE = IRecipeType.SMELTING;
 
@@ -196,13 +197,14 @@ public class BurnerGunMK1 extends Item{
     }
 
     public boolean canMine(World world, BlockPos pos, BlockState state, PlayerEntity player, BurnerGunMK1Info info, List<Upgrade> upgrades){
-        if (    state.getDestroySpeed(world, pos) <= 0
+        if (    state.getDestroySpeed(world, pos) < 0
                 || state.getBlock() instanceof Light
-                || !world.mayInteract(player, pos) || !player.mayBuild()
-                || MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player))
+                || !world.mayInteract(player, pos)
                 || info.getFuelValue() < getUseValue(upgrades)
                 || state.getBlock().equals(Blocks.AIR.defaultBlockState())
-                || state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState()))
+                || state.getBlock().equals(Blocks.CAVE_AIR.defaultBlockState())
+                || (!state.getFluidState().isEmpty() && !state.hasProperty(BlockStateProperties.WATERLOGGED))
+                || world.isEmptyBlock(pos))
             return false;
         return true;
     }

@@ -11,6 +11,7 @@ import com.nindybun.burnergun.common.items.upgrades.Trash.Trash;
 import com.nindybun.burnergun.common.items.upgrades.Trash.TrashHandler;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
 import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
+import com.nindybun.burnergun.common.network.PacketHandler;
 import com.nindybun.burnergun.util.UpgradeUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -195,8 +196,8 @@ public class PacketUpdateGun {
                     infoMK1.setUpgradeNBTList(UpgradeUtil.setUpgradesNBT(currentUpgrades));
                 else
                     infoMK2.setUpgradeNBTList(UpgradeUtil.setUpgradesNBT(currentUpgrades));
-                if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER && open)
-                    ModScreens.openGunSettingsScreen(gun);
+                if (open)
+                    PacketHandler.sendTo(new PacketClientUpdateGun(gun), player);
             });
             ctx.get().setPacketHandled(true);
         }

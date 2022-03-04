@@ -3,8 +3,10 @@ package com.nindybun.burnergun.common.network.packets;
 import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
+import com.nindybun.burnergun.common.network.PacketHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.items.IItemHandler;
@@ -40,7 +42,7 @@ public class PacketRefuel {
                 IItemHandler handler = BurnerGunMK1.getHandler(gun);
                 BurnerGunMK1Info info = BurnerGunMK1.getInfo(gun);
                 ItemStack stack = handler.getStackInSlot(0);
-                if (stack == ItemStack.EMPTY
+                if (stack == ItemStack.EMPTY || stack.getItem() == Items.BUCKET
                         || stack.getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
                         || stack.getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
                         || stack.getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
@@ -53,8 +55,8 @@ public class PacketRefuel {
                     info.setFuelValue(info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)));
                     ItemStack containerItem = handler.getStackInSlot(0).getContainerItem();
                     handler.getStackInSlot(0).shrink(1);
-                    if (!containerItem.isEmpty())
-                        handler.insertItem(0, containerItem, false);
+                    if (player.inventory.add(containerItem))
+                        player.drop(containerItem, true);
                 }
             });
 
