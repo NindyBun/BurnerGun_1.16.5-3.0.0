@@ -7,6 +7,8 @@ import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
 import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
 import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
+import com.nindybun.burnergun.common.network.PacketHandler;
+import com.nindybun.burnergun.common.network.packets.PacketRefuel;
 import com.nindybun.burnergun.util.UpgradeUtil;
 import com.nindybun.burnergun.util.WorldUtil;
 import net.minecraft.block.BlockState;
@@ -160,7 +162,8 @@ public class BurnerGunMK1 extends Item{
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void refuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player){
-        IItemHandler handler = getHandler(stack);
+        PacketHandler.sendToServer(new PacketRefuel());
+        /*IItemHandler handler = getHandler(stack);
         if (!handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
                 && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
                 && !handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
@@ -175,17 +178,17 @@ public class BurnerGunMK1 extends Item{
                 if (player.inventory.add(containerItem))
                     player.drop(containerItem, true);
             }
-        }
+        }*/
     }
 
-    public void useFuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player, List<Upgrade> upgrades){
+    public void useFuel(BurnerGunMK1Info info, ItemStack stack, PlayerEntity player, List<Upgrade> upgrades){;
+        info.setFuelValue(info.getFuelValue() - getUseValue(upgrades));
         if (!getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
                 && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
                 && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
                 && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
                 && !getHandler(stack).getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem()))
             refuel(info, stack, player);
-        info.setFuelValue(info.getFuelValue() - getUseValue(upgrades));
     }
 
     public double getUseValue(List<Upgrade> upgrades){

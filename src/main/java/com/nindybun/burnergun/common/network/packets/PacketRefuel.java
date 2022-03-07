@@ -55,8 +55,8 @@ public class PacketRefuel {
                     info.setFuelValue(info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)));
                     ItemStack containerItem = handler.getStackInSlot(0).getContainerItem();
                     handler.getStackInSlot(0).shrink(1);
-                    if (player.inventory.add(containerItem))
-                        player.drop(containerItem, true);
+                    if (!containerItem.isEmpty())
+                        PacketHandler.sendTo(new PacketClientRefuel(gun, containerItem), player);
                 }
             });
 

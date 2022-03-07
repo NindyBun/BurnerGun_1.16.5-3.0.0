@@ -1,6 +1,7 @@
 package com.nindybun.burnergun.util;
 
 import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
@@ -47,16 +48,30 @@ public class UpgradeUtil {
         return list;
     }
 
-    public static ListNBT setFiltersNBT(List<ItemStack> items) {
+    public static ListNBT serializeList(List<Item> items) {
         ListNBT list = new ListNBT();
 
         items.forEach(item -> {
             CompoundNBT compound = new CompoundNBT();
-            compound.putInt(KEY_FILTER, MapItem.getId(item.getItem()));
+            compound.putInt(KEY_FILTER, MapItem.getId(item));
             list.add(compound);
         });
 
         return list;
+    }
+
+    public static List<Item> deserializeList(ListNBT list){
+        List<Item> items = new ArrayList<>();
+        if (list.isEmpty())
+            return items;
+        for (int i = 0; i < list.size(); i++) {
+            CompoundNBT listNBT = list.getCompound(i);
+            Item type = MapItem.byId(listNBT.getInt(KEY_FILTER));
+            if (type == null)
+                continue;
+            items.add(type);
+        }
+        return items;
     }
 
     public static void removeEnchantment(ItemStack gun, Enchantment e){
@@ -168,9 +183,9 @@ public class UpgradeUtil {
     }
 
     public static void updateUpgrade(ItemStack stack, Upgrade upgrade){
-        ListNBT upgrades = BurnerGunMK1.getInfo(stack) != null ? BurnerGunMK1.getInfo(stack).getUpgradeNBTList() : BurnerGunMK2.getInfo(stack).getUpgradeNBTList();
+        ListNBT upgrades = stack.getOrCreateTag().getList(BurnerGunNBT.UPGRADES, Constants.NBT.TAG_COMPOUND);
         upgrades.forEach(e -> {
-            CompoundNBT compound = (CompoundNBT)e;
+            CompoundNBT compound = (CompoundNBT) e;
             String name = compound.getString(KEY_UPGRADE);
             boolean isEnabled = compound.getBoolean(KEY_ENABLED);
             if( (name.contains(Upgrade.FORTUNE_1.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.SILK_TOUCH) )
