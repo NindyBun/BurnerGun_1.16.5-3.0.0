@@ -4,6 +4,7 @@ import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -33,7 +34,7 @@ public class PacketClientPlayLightSound {
         public static void handle(PacketClientPlayLightSound msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    PlayerEntity player = Minecraft.getInstance().player;
+                    ClientPlayerEntity player = Minecraft.getInstance().player;
                     if (player == null)
                         return;
                     ItemStack gun = !BurnerGunMK2.getGun(player).isEmpty() ? BurnerGunMK2.getGun(player) : BurnerGunMK1.getGun(player);
