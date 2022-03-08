@@ -6,13 +6,6 @@ import com.nindybun.burnergun.client.Keybinds;
 //import com.nindybun.burnergun.client.particles.ModParticles;
 import com.nindybun.burnergun.client.particles.ModParticles;
 import com.nindybun.burnergun.common.blocks.ModBlocks;
-import com.nindybun.burnergun.common.capabilities.*;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoStorage;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2InfoProvider;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2InfoStorage;
 import com.nindybun.burnergun.common.containers.ModContainers;
 import com.nindybun.burnergun.common.entities.ModEntities;
 import com.nindybun.burnergun.common.entities.renders.MegaBlazeProjectileRenderer;
@@ -53,7 +46,6 @@ public class BurnerGun{
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::setupClient);
-        MinecraftForge.EVENT_BUS.register(new FMLEvents());
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -62,8 +54,6 @@ public class BurnerGun{
     private void setup(final FMLCommonSetupEvent event)
     {
         PacketHandler.register();
-        CapabilityManager.INSTANCE.register(BurnerGunMK1Info.class, new BurnerGunMK1InfoStorage(), BurnerGunMK1InfoProvider::new);
-        CapabilityManager.INSTANCE.register(BurnerGunMK2Info.class, new BurnerGunMK2InfoStorage(), BurnerGunMK2InfoProvider::new);
     }
 
     private void setupClient(final FMLClientSetupEvent event)
