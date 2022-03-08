@@ -1,6 +1,7 @@
 package com.nindybun.burnergun.common.items.burnergunmk1;
 
 import com.nindybun.burnergun.common.containers.BurnerGunMK1Container;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,47 +14,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BurnerGunMK1Provider implements ICapabilitySerializable<INBT> {
+    private final BurnerGunMK1Handler instance = new BurnerGunMK1Handler(BurnerGunMK1Container.MAX_EXPECTED_GUN_SLOT_COUNT);
     private final Direction NO_SPECIFIC_SIDE = null;
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap) return (LazyOptional<T>)(lazyInitialisionSupplier).cast();
-        return LazyOptional.empty();
+        return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap ? (LazyOptional<T>)(LazyOptional.of(()->instance)) : LazyOptional.empty();
     }
 
     @Override
     public INBT serializeNBT() {
-        return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(getCachedInventory(), NO_SPECIFIC_SIDE);
+        return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(instance, NO_SPECIFIC_SIDE);
     }
 
     @Override
     public void deserializeNBT(INBT nbt) {
-        CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(getCachedInventory(), NO_SPECIFIC_SIDE, nbt);
+        CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(instance, NO_SPECIFIC_SIDE, nbt);
     }
 
-    /**
-     * Return a lazily-initialised inventory
-     * i.e. After the class instance has been created, but before the first call to this function, the inventory hasn't been created yet.
-     * At the time of the first call, we create the inventory
-     * For all subsequent calls, we return the previously-created instance.
-     * To be honest, unless your initialisation is very expensive in memory or time, it's probably not worth the effort, i.e. you
-     *   could just allocate the itemStackHandlerFlowerBag in your constructor and your lazyInitialisationSupplier could just
-     *   return that without a dedicated method to perform a cache check.
-     * @return the ItemStackHandlerFlowerBag which stores the flowers.
-     */
-    private BurnerGunMK1Handler getCachedInventory() {
-        if (handler == null) {
-            handler = new BurnerGunMK1Handler(BurnerGunMK1Container.MAX_EXPECTED_GUN_SLOT_COUNT);
-        }
-        return handler;
-    }
-
-    private BurnerGunMK1Handler handler;  // initially null until our first call to getCachedInventory
-
-
-    //  a supplier: when called, returns the result of getCachedInventory()
-    private final LazyOptional<IItemHandler> lazyInitialisionSupplier = LazyOptional.of(this::getCachedInventory);
-
-    
 }

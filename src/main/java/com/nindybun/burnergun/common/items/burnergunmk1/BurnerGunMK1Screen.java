@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.nindybun.burnergun.client.screens.ModScreens;
 import com.nindybun.burnergun.common.BurnerGun;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
 import com.nindybun.burnergun.common.containers.BurnerGunMK1Container;
 import com.nindybun.burnergun.common.network.PacketHandler;
 import com.nindybun.burnergun.common.network.packets.PacketOpenTrashGui;
