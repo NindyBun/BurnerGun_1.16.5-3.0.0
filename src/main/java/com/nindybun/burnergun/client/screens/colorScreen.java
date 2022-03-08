@@ -2,10 +2,7 @@ package com.nindybun.burnergun.client.screens;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.nindybun.burnergun.common.BurnerGun;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
-import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
-import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.network.PacketHandler;
 import com.nindybun.burnergun.common.network.packets.PacketChangeColor;
 import com.nindybun.burnergun.util.StringUtil;
@@ -30,14 +27,10 @@ public class colorScreen extends Screen implements Slider.ISlider {
     private Slider  redSlider,
                     greenSlider,
                     blueSlider;
-    private float[] color = new float[3];
+    private float[] color;
     protected colorScreen(ItemStack gun) {
         super(new StringTextComponent("title"));
-        BurnerGunMK1Info infoMK1 = BurnerGunMK1.getInfo(gun);
-        BurnerGunMK2Info infoMK2 = BurnerGunMK2.getInfo(gun);
-        color[0] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Red") : infoMK2.getColor().getCompound(0).getFloat("Red");
-        color[1] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Green") : infoMK2.getColor().getCompound(0).getFloat("Green");
-        color[2] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Blue") : infoMK2.getColor().getCompound(0).getFloat("Blue");
+        color = BurnerGunNBT.getColor(gun);
     }
 
     @Override

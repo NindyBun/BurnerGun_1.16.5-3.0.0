@@ -1,6 +1,5 @@
 package com.nindybun.burnergun.common.containers;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1Handler;
 import net.minecraft.entity.player.PlayerEntity;

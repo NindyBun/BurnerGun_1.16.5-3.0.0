@@ -1,7 +1,6 @@
 package com.nindybun.burnergun.common.network.packets;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import net.minecraft.client.Minecraft;
@@ -40,9 +39,7 @@ public class PacketClientPlayLightSound {
                     ItemStack gun = !BurnerGunMK2.getGun(player).isEmpty() ? BurnerGunMK2.getGun(player) : BurnerGunMK1.getGun(player);
                     if (gun.isEmpty())
                         return;
-                    BurnerGunMK1Info infoMK1 = BurnerGunMK1.getInfo(gun);
-                    BurnerGunMK2Info infoMK2 = BurnerGunMK2.getInfo(gun);
-                    player.playSound(SoundEvents.WOOL_PLACE, (infoMK1 != null ? infoMK1.getVolume() : infoMK2.getVolume())*0.5f, 1.0f);
+                    player.playSound(SoundEvents.WOOL_PLACE, BurnerGunNBT.getVolume(gun) *0.5f, 1.0f);
                 });
             });
             ctx.get().setPacketHandled(true);

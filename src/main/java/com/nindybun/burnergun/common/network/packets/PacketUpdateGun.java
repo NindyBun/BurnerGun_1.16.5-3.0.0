@@ -1,9 +1,8 @@
 package com.nindybun.burnergun.common.network.packets;
 
 import com.nindybun.burnergun.client.screens.ModScreens;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
 import com.nindybun.burnergun.common.containers.ModContainers;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.common.items.upgrades.Auto_Smelt.AutoSmelt;
@@ -65,8 +64,6 @@ public class PacketUpdateGun {
                 ItemStack gun = !BurnerGunMK2.getGun(player).isEmpty() ? BurnerGunMK2.getGun(player) : BurnerGunMK1.getGun(player);
                 if (gun.isEmpty())
                     return;
-                BurnerGunMK1Info infoMK1 = BurnerGunMK1.getInfo(gun);
-                BurnerGunMK2Info infoMK2 = BurnerGunMK2.getInfo(gun);
 
                 IItemHandler handler = gun.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
                 List<Upgrade> currentUpgrades = new ArrayList<>();
@@ -85,105 +82,57 @@ public class PacketUpdateGun {
                 }
 
                 if (UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.TRASH)){
-                    List<ItemStack> trashFilter = new ArrayList<>();
+                    List<Item> trashFilter = new ArrayList<>();
                     for (int i = 0; i < trashHandler.getSlots(); i++){
                         if (!trashHandler.getStackInSlot(i).getItem().equals(Items.AIR))
-                            trashFilter.add(trashHandler.getStackInSlot(i));
+                            trashFilter.add(trashHandler.getStackInSlot(i).getItem());
                     }
-                    if (infoMK1 != null)
-                        infoMK1.setTrashNBTFilter(UpgradeUtil.setFiltersNBT(trashFilter));
-                    else
-                        infoMK2.setTrashNBTFilter(UpgradeUtil.setFiltersNBT(trashFilter));
+                    BurnerGunNBT.setTrashFilter(gun, trashFilter);
                 }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.TRASH)){
-                    if (infoMK1 != null)
-                        infoMK1.setTrashNBTFilter(new ListNBT());
-                    else
-                        infoMK2.setTrashNBTFilter(new ListNBT());
+                    BurnerGunNBT.setTrashFilter(gun, new ArrayList<>());
                 }
 
                 if (UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.AUTO_SMELT)){
-                    List<ItemStack> smeltFilter = new ArrayList<>();
+                    List<Item> smeltFilter = new ArrayList<>();
                     for (int i = 0; i < smeltHandler.getSlots(); i++){
                         if (!smeltHandler.getStackInSlot(i).getItem().equals(Items.AIR))
-                            smeltFilter.add(smeltHandler.getStackInSlot(i));
+                            smeltFilter.add(smeltHandler.getStackInSlot(i).getItem());
                     }
-                    if (infoMK1 != null)
-                        infoMK1.setSmeltNBTFilter(UpgradeUtil.setFiltersNBT(smeltFilter));
-                    else
-                        infoMK2.setSmeltNBTFilter(UpgradeUtil.setFiltersNBT(smeltFilter));
+                    BurnerGunNBT.setSmeltFilter(gun, smeltFilter);
                 }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.AUTO_SMELT)){
-                    if (infoMK1 != null)
-                        infoMK1.setSmeltNBTFilter(new ListNBT());
-                    else
-                        infoMK2.setSmeltNBTFilter(new ListNBT());
+                    BurnerGunNBT.setSmeltFilter(gun, new ArrayList<>());
                 }
 
                 if (UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.FOCAL_POINT_1)){
                     Upgrade upgrade = UpgradeUtil.getUpgradeFromListByUpgrade(currentUpgrades, Upgrade.FOCAL_POINT_1);
-                    if (infoMK1 != null){
-                        if (infoMK1.getRaycastRange() > (int)upgrade.getExtraValue())
-                            infoMK1.setRaycastRange((int)upgrade.getExtraValue());
-                        infoMK1.setMaxRaycastRange((int)upgrade.getExtraValue());
-                    }else{
-                        if (infoMK2.getRaycastRange() > (int)upgrade.getExtraValue())
-                            infoMK2.setRaycastRange((int)upgrade.getExtraValue());
-                        infoMK2.setMaxRaycastRange((int)upgrade.getExtraValue());
-                    }
+                    if (BurnerGunNBT.getRaycast(gun) > (int)upgrade.getExtraValue())
+                        BurnerGunNBT.setRaycast(gun, (int)upgrade.getExtraValue());
+                    BurnerGunNBT.setMaxRaycast(gun, (int)upgrade.getExtraValue());
                 }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.FOCAL_POINT_1)){
-                    if (infoMK1 != null){
-                        if (infoMK1.getRaycastRange() > 5)
-                            infoMK1.setRaycastRange(5);
-                        if (infoMK1.getMaxRaycastRange() > 5)
-                            infoMK1.setMaxRaycastRange(5);
-                    }else{
-                        if (infoMK2.getRaycastRange() > 5)
-                            infoMK2.setRaycastRange(5);
-                        if (infoMK2.getMaxRaycastRange() > 5)
-                            infoMK2.setMaxRaycastRange(5);
-                    }
-
+                    if (BurnerGunNBT.getRaycast(gun) > BurnerGunNBT.MIN_RAYCAST)
+                        BurnerGunNBT.setRaycast(gun, BurnerGunNBT.MIN_RAYCAST);
+                    if (BurnerGunNBT.getMaxRaycast(gun) > BurnerGunNBT.MIN_RAYCAST)
+                        BurnerGunNBT.setMaxRaycast(gun, BurnerGunNBT.MIN_RAYCAST);
                 }
 
                 if (UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.VERTICAL_EXPANSION_1)){
                     Upgrade upgrade = UpgradeUtil.getUpgradeFromListByUpgrade(currentUpgrades, Upgrade.VERTICAL_EXPANSION_1);
-                    if (infoMK1 != null){
-                        if (infoMK1.getVertical() > upgrade.getTier())
-                            infoMK1.setVertical(upgrade.getTier());
-                        infoMK1.setMaxVertical(upgrade.getTier());
-                    }else{
-                        if (infoMK2.getVertical() > upgrade.getTier())
-                            infoMK2.setVertical(upgrade.getTier());
-                        infoMK2.setMaxVertical(upgrade.getTier());
-                    }
+                    if (BurnerGunNBT.getVertical(gun) > upgrade.getTier())
+                        BurnerGunNBT.setVertical(gun, upgrade.getTier());
+                    BurnerGunNBT.setMaxVertical(gun, upgrade.getTier());
                 }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.VERTICAL_EXPANSION_1)){
-                    if (infoMK1 != null){
-                        infoMK1.setVertical(0);
-                        infoMK1.setMaxVertical(0);
-                    }else{
-                        infoMK2.setVertical(0);
-                        infoMK2.setMaxVertical(0);
-                    }
+                    BurnerGunNBT.setVertical(gun, 0);
+                    BurnerGunNBT.setMaxVertical(gun, 0);
                 }
 
                 if (UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.HORIZONTAL_EXPANSION_1)){
                     Upgrade upgrade = UpgradeUtil.getUpgradeFromListByUpgrade(currentUpgrades, Upgrade.HORIZONTAL_EXPANSION_1);
-                    if (infoMK1 != null){
-                        if (infoMK1.getHorizontal() > upgrade.getTier())
-                            infoMK1.setHorizontal(upgrade.getTier());
-                        infoMK1.setMaxHorizontal(upgrade.getTier());
-                    }else{
-                        if (infoMK2.getHorizontal() > upgrade.getTier())
-                            infoMK2.setHorizontal(upgrade.getTier());
-                        infoMK2.setMaxHorizontal(upgrade.getTier());
-                    }
+                    if (BurnerGunNBT.getHorizontal(gun) > upgrade.getTier())
+                        BurnerGunNBT.setHorizontal(gun, upgrade.getTier());
+                    BurnerGunNBT.setMaxHorizontal(gun, upgrade.getTier());
                 }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.HORIZONTAL_EXPANSION_1)){
-                    if (infoMK1 != null){
-                        infoMK1.setHorizontal(0);
-                        infoMK1.setMaxHorizontal(0);
-                    }else{
-                        infoMK2.setHorizontal(0);
-                        infoMK2.setMaxHorizontal(0);
-                    }
+                    BurnerGunNBT.setHorizontal(gun, 0);
+                    BurnerGunNBT.setMaxHorizontal(gun, 0);
                 }
 
                 currentUpgrades.forEach(upgrade -> {
@@ -192,10 +141,7 @@ public class PacketUpdateGun {
                         upgrade.setActive(!upgrade.isActive());
                     }
                 });
-                if (infoMK1 != null)
-                    infoMK1.setUpgradeNBTList(UpgradeUtil.setUpgradesNBT(currentUpgrades));
-                else
-                    infoMK2.setUpgradeNBTList(UpgradeUtil.setUpgradesNBT(currentUpgrades));
+                BurnerGunNBT.setUprades(gun, currentUpgrades);
                 if (open)
                     PacketHandler.sendTo(new PacketClientUpdateGun(gun), player);
             });

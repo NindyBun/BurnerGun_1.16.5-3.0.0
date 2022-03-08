@@ -15,44 +15,21 @@ import javax.annotation.Nullable;
 
 public class AutoSmeltProvider implements ICapabilitySerializable<INBT> {
     private final Direction NO_SPECIFIC_SIDE = null;
+    private AutoSmeltHandler instance = new AutoSmeltHandler(AutoSmeltContainer.MAX_EXPECTED_HANDLER_SLOT_COUNT);
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap) return (LazyOptional<T>)(lazyInitialisionSupplier);
-        return LazyOptional.empty();
+        return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap ? (LazyOptional<T>)(LazyOptional.of(() ->instance)) : LazyOptional.empty();
     }
 
     @Override
     public INBT serializeNBT() {
-        return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(getCachedInventory(), NO_SPECIFIC_SIDE);
+        return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(instance, NO_SPECIFIC_SIDE);
     }
 
     @Override
     public void deserializeNBT(INBT nbt) {
-        CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(getCachedInventory(), NO_SPECIFIC_SIDE, nbt);
+        CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(instance, NO_SPECIFIC_SIDE, nbt);
     }
-
-    /**
-     * Return a lazily-initialised inventory
-     * i.e. After the class instance has been created, but before the first call to this function, the inventory hasn't been created yet.
-     * At the time of the first call, we create the inventory
-     * For all subsequent calls, we return the previously-created instance.
-     * To be honest, unless your initialisation is very expensive in memory or time, it's probably not worth the effort, i.e. you
-     *   could just allocate the itemStackHandlerFlowerBag in your constructor and your lazyInitialisationSupplier could just
-     *   return that without a dedicated method to perform a cache check.
-     * @return the ItemStackHandlerFlowerBag which stores the flowers.
-     */
-    private AutoSmeltHandler getCachedInventory() {
-        if (autoSmeltHandler == null) {
-            autoSmeltHandler = new AutoSmeltHandler(AutoSmeltContainer.MAX_EXPECTED_HANDLER_SLOT_COUNT);
-        }
-        return autoSmeltHandler;
-    }
-
-    private AutoSmeltHandler autoSmeltHandler;  // initially null until our first call to getCachedInventory
-
-
-    //  a supplier: when called, returns the result of getCachedInventory()
-    private final LazyOptional<IItemHandler> lazyInitialisionSupplier = LazyOptional.of(this::getCachedInventory);
 }

@@ -1,7 +1,5 @@
 package com.nindybun.burnergun.common.items.upgrades.Auto_Fuel;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
-import com.nindybun.burnergun.common.containers.AutoFuelContainer;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
 import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
 import com.nindybun.burnergun.common.network.PacketHandler;
@@ -52,11 +50,7 @@ public class AutoFuel extends UpgradeCard {
         return new AutoFuelProvider();
 
     }
-
-    public static IItemHandler getHandler(ItemStack itemStack) {
-        return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
-    }
-
+/*
     private final String HANDLER_NBT_TAG = "autofuelHandlerNBT";
 
     @Override
@@ -75,5 +69,5 @@ public class AutoFuel extends UpgradeCard {
                 CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(cap, null, nbt.get(HANDLER_NBT_TAG));
             });
         }
-    }
+    }*/
 }

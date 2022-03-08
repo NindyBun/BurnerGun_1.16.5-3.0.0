@@ -54,7 +54,7 @@ public class Trash extends UpgradeCard {
         return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
     }
 
-    private final String HANDLER_NBT_TAG = "trashHandlerNBT";
+    /*private final String HANDLER_NBT_TAG = "trashHandlerNBT";
 
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
@@ -72,5 +72,5 @@ public class Trash extends UpgradeCard {
                 CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(cap, null, nbt.get(HANDLER_NBT_TAG));
             });
         }
-    }
+    }*/
 }

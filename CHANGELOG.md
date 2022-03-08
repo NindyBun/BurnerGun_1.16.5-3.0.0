@@ -42,3 +42,5 @@
 - Fuel was used on air blocks
 ### v3.1.4
 - Blaze cage captured pigs, now it captures Blazes
+### v3.2.0
+- Ported the 1.18.1 version to here
