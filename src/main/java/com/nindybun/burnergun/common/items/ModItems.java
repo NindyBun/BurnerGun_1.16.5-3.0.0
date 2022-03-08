@@ -27,7 +27,7 @@ public class ModItems {
 
 
     public static final RegistryObject<Item> BLAZE_CAGE = ITEMS.register("blaze_cage", () -> new BlazeCage());
-    public static final RegistryObject<Item> CAGED_BLAZE= ITEMS.register("caged_blaze", () -> new Item(ITEM_GROUP.stacksTo(1)));
+    public static final RegistryObject<Item> CAGED_BLAZE= ITEMS.register("caged_blaze", () -> new Item(ITEM_GROUP.stacksTo(64)));
     public static final RegistryObject<Item> BURNER_GUN_MK1 = ITEMS.register("burnergun_mk1", () ->  new BurnerGunMK1());
     public static final RegistryObject<Item> BURNER_GUN_MK2 = ITEMS.register("burnergun_mk2", () -> new BurnerGunMK2());
     public static final RegistryObject<Item> LIGHT_ITEM = ITEMS.register("light", () -> new BlockItem(ModBlocks.LIGHT.get(), ITEM_GROUP.stacksTo(1)));
