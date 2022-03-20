@@ -2,7 +2,6 @@ package com.nindybun.burnergun.client.particles;
 
 import com.nindybun.burnergun.client.particles.ModParticles;
 import com.nindybun.burnergun.client.particles.lightParticle.LightParticleType;
-import com.nindybun.burnergun.client.particles.megaBlazeFireballParticle.MegaBlazeFireballParticleType;
 import com.nindybun.burnergun.common.BurnerGun;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,6 +14,5 @@ public class ParticleRenderDispatcher {
     @SubscribeEvent
     public static void registerFactories(ParticleFactoryRegisterEvent evt) {
         Minecraft.getInstance().particleEngine.register(ModParticles.LIGHT_PARTICLE.get(), LightParticleType.LightParticleFactory::new);
-        Minecraft.getInstance().particleEngine.register(ModParticles.MEGA_BLAZE_FIREBALL_PARTICLE.get(), MegaBlazeFireballParticleType.MegaBlazeFireballParticleFactory::new);
-    }
+        }
 }
