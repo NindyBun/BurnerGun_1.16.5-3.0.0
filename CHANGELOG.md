@@ -44,3 +44,5 @@
 - Blaze cage captured pigs, now it captures Blazes
 ### v3.2.0
 - Ported the 1.18.1 version to here
+## v3.3.0
+- Ported 1.18.1-4.1.0 version to here
