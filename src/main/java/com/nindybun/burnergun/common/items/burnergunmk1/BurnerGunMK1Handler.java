@@ -39,8 +39,8 @@ public class BurnerGunMK1Handler extends ItemStackHandler {
         }
         if (slot != 0 && stack.getItem() instanceof UpgradeCard
                 && !(Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade()))
-                && getUpgradeByUpgrade(((UpgradeCard) stack.getItem()).getUpgrade()) != null){
-            return false;
+                && getUpgradeByUpgrade(((UpgradeCard) stack.getItem()).getUpgrade()) == null){
+            return true;
         }
         return false;
     }
