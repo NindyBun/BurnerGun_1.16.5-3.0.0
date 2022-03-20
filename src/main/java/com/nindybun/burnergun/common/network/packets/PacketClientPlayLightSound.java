@@ -19,28 +19,26 @@ import java.util.function.Supplier;
 
 public class PacketClientPlayLightSound {
     private static final Logger LOGGER = LogManager.getLogger();
-    public PacketClientPlayLightSound() {
-
+    private float volume;
+    public PacketClientPlayLightSound(float volume) {
+        this.volume = volume;
     }
 
     public static void encode(PacketClientPlayLightSound msg, PacketBuffer buffer) {
+        buffer.writeFloat(msg.volume);
     }
 
     public static PacketClientPlayLightSound decode(PacketBuffer buffer) {
-        return new PacketClientPlayLightSound();
+        return new PacketClientPlayLightSound(buffer.readFloat());
     }
 
     public static class Handler {
         public static void handle(PacketClientPlayLightSound msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    ClientPlayerEntity player = Minecraft.getInstance().player;
-                    if (player == null)
+                    if (Minecraft.getInstance().player == null)
                         return;
-                    ItemStack gun = !BurnerGunMK2.getGun(player).isEmpty() ? BurnerGunMK2.getGun(player) : BurnerGunMK1.getGun(player);
-                    if (gun.isEmpty())
-                        return;
-                    player.playSound(SoundEvents.WOOL_PLACE, BurnerGunNBT.getVolume(gun) *0.5f, 1.0f);
+                    Minecraft.getInstance().player.playSound(SoundEvents.WOOL_PLACE, msg.volume*0.5f, 1.0f);
                 });
             });
             ctx.get().setPacketHandled(true);

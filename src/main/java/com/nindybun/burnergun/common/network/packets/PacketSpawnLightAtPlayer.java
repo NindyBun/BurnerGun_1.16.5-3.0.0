@@ -56,7 +56,7 @@ public class PacketSpawnLightAtPlayer {
                             else
                                 return;
                         }
-                        PacketHandler.sendTo(new PacketClientPlayLightSound(), player);
+                        PacketHandler.sendTo(new PacketClientPlayLightSound(BurnerGunNBT.getVolume(gun)), player);
                         player.level.setBlockAndUpdate(new BlockPos(player.position().add(new Vector3d(0, 1, 0))), ModBlocks.LIGHT.get().defaultBlockState());
                     }
                 }

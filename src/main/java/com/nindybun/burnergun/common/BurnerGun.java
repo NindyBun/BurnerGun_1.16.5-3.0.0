@@ -7,9 +7,6 @@ import com.nindybun.burnergun.client.Keybinds;
 import com.nindybun.burnergun.client.particles.ModParticles;
 import com.nindybun.burnergun.common.blocks.ModBlocks;
 import com.nindybun.burnergun.common.containers.ModContainers;
-import com.nindybun.burnergun.common.entities.ModEntities;
-import com.nindybun.burnergun.common.entities.renders.MegaBlazeProjectileRenderer;
-import com.nindybun.burnergun.common.entities.renders.MegaBlazeRenderer;
 import com.nindybun.burnergun.common.items.ModItems;
 import com.nindybun.burnergun.common.network.PacketHandler;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -42,7 +39,6 @@ public class BurnerGun{
         ModItems.UPGRADE_ITEMS.register(modEventBus);
         ModContainers.CONTAINERS.register(modEventBus);
         ModParticles.PARTICLE.register(modEventBus);
-        //ModEntities.ENTITIES.register(modEventBus);
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::setupClient);
@@ -61,9 +57,7 @@ public class BurnerGun{
         ClientSetup.setup();
         Keybinds.register();
         MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
-        //RenderingRegistry.registerEntityRenderingHandler(ModEntities.MEGA_BLAZE_PROJECTILE.get(), MegaBlazeProjectileRenderer::new);
-        //RenderingRegistry.registerEntityRenderingHandler(ModEntities.MEGA_BLAZE.get(), MegaBlazeRenderer::new);
-    }
+}
 
 
     public static ItemGroup itemGroup = new ItemGroup(BurnerGun.MOD_ID) {

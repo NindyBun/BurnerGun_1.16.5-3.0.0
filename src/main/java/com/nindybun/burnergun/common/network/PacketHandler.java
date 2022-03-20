@@ -25,10 +25,8 @@ public class PacketHandler {
     public static void register(){
         int id = 0;
         INSTANCE.registerMessage(id++, PacketOpenBurnerGunGui.class, PacketOpenBurnerGunGui::encode, PacketOpenBurnerGunGui::decode, PacketOpenBurnerGunGui.Handler::handle);
-        INSTANCE.registerMessage(id++, PacketOpenAutoFuelGui.class, PacketOpenAutoFuelGui::encode, PacketOpenAutoFuelGui::decode, PacketOpenAutoFuelGui.Handler::handle);
         INSTANCE.registerMessage(id++, PacketOpenTrashGui.class, PacketOpenTrashGui::encode, PacketOpenTrashGui::decode, PacketOpenTrashGui.Handler::handle);
         INSTANCE.registerMessage(id++, PacketOpenAutoSmeltGui.class, PacketOpenAutoSmeltGui::encode, PacketOpenAutoSmeltGui::decode, PacketOpenAutoSmeltGui.Handler::handle);
-        INSTANCE.registerMessage(id++, PacketOpenUpgradeBagGui.class, PacketOpenUpgradeBagGui::encode, PacketOpenUpgradeBagGui::decode, PacketOpenUpgradeBagGui.Handler::handle);
         INSTANCE.registerMessage(id++, PacketToggleTrashFilter.class, PacketToggleTrashFilter::encode, PacketToggleTrashFilter::decode, PacketToggleTrashFilter.Handler::handle);
         INSTANCE.registerMessage(id++, PacketToggleSmeltFilter.class, PacketToggleSmeltFilter::encode, PacketToggleSmeltFilter::decode, PacketToggleSmeltFilter.Handler::handle);
         INSTANCE.registerMessage(id++, PacketUpdateUpgrade.class, PacketUpdateUpgrade::encode, PacketUpdateUpgrade::decode, PacketUpdateUpgrade.Handler::handle);
@@ -41,7 +39,6 @@ public class PacketHandler {
 
         INSTANCE.registerMessage(id++, PacketClientUpdateGun.class, PacketClientUpdateGun::encode, PacketClientUpdateGun::decode, PacketClientUpdateGun.Handler::handle);
         INSTANCE.registerMessage(id++, PacketClientPlayLightSound.class, PacketClientPlayLightSound::encode, PacketClientPlayLightSound::decode, PacketClientPlayLightSound.Handler::handle);
-        INSTANCE.registerMessage(id++, PacketClientRefuel.class, PacketClientRefuel::encode, PacketClientRefuel::decode, PacketClientRefuel.Handler::handle);
 
     }
 

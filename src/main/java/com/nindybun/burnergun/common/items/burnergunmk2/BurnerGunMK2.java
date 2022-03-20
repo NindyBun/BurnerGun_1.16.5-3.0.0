@@ -89,33 +89,6 @@ public class BurnerGunMK2 extends Item {
         return new BurnerGunMK2Provider();
     }
 
-/*    private final String INFO_NBT_TAG = "burnergunMK2InfoNBT";
-    private final String HANDLER_NBT_TAG = "burnergunMK2HandlerNBT";
-
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT infoTag = new CompoundNBT();
-        stack.getCapability(BurnerGunMK2InfoProvider.burnerGunInfoMK2Capability, null).ifPresent((cap) -> {
-            infoTag.put(INFO_NBT_TAG, BurnerGunMK2InfoProvider.burnerGunInfoMK2Capability.writeNBT(cap, null));
-        });
-        stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent((cap)->{
-            infoTag.put(HANDLER_NBT_TAG, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(cap, null));
-        });
-        return infoTag;
-    }
-
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (nbt != null){
-            stack.getCapability(BurnerGunMK2InfoProvider.burnerGunInfoMK2Capability, null).ifPresent((cap) -> {
-                BurnerGunMK2InfoProvider.burnerGunInfoMK2Capability.readNBT(cap, null, nbt.get(INFO_NBT_TAG));
-            });
-            stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent((cap)->{
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(cap, null, nbt.get(HANDLER_NBT_TAG));
-            });
-        }
-    }*/
-
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
@@ -162,9 +135,9 @@ public class BurnerGunMK2 extends Item {
         Optional<? extends AbstractCookingRecipe> recipe = world.getRecipeManager().getRecipeFor(RECIPE_TYPE, inv, world);
         if (recipe.isPresent()){
             ItemStack smelted = recipe.get().getResultItem().copy();
-            if (smeltList.contains(smelted.getItem()) && smeltWhitelist)
+            if (smeltList.contains(drop.getItem()) && smeltWhitelist)
                 return smelted;
-            else if (!smeltList.contains(smelted.getItem()) && !smeltWhitelist)
+            else if (!smeltList.contains(drop.getItem()) && !smeltWhitelist)
                 return smelted;
         }
         return drop;

@@ -3,8 +3,6 @@ package com.nindybun.burnergun.common.items.upgrades.Trash;
 import com.nindybun.burnergun.common.containers.TrashContainer;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
 import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
-import com.nindybun.burnergun.common.network.PacketHandler;
-import com.nindybun.burnergun.common.network.packets.PacketOpenTrashGui;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -20,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class Trash extends UpgradeCard {
     Upgrade upgrade;
@@ -35,7 +32,10 @@ public class Trash extends UpgradeCard {
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!world.isClientSide) {
-            PacketHandler.sendToServer(new PacketOpenTrashGui());
+            player.openMenu(new SimpleNamedContainerProvider(
+                    (windowId, playerInv, playerEntity) -> new TrashContainer(windowId, playerInv, (TrashHandler) getHandler(stack)),
+                    new StringTextComponent("")
+            ));
         }
         return ActionResult.success(stack);
     }
@@ -53,24 +53,4 @@ public class Trash extends UpgradeCard {
     public static IItemHandler getHandler(ItemStack itemStack) {
         return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
     }
-
-    /*private final String HANDLER_NBT_TAG = "trashHandlerNBT";
-
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT infoTag = new CompoundNBT();
-        stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent((cap)->{
-            infoTag.put(HANDLER_NBT_TAG, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(cap, null));
-        });
-        return infoTag;
-    }
-
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (nbt != null){
-            stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent((cap)->{
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(cap, null, nbt.get(HANDLER_NBT_TAG));
-            });
-        }
-    }*/
 }

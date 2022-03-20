@@ -126,36 +126,6 @@ public class BurnerGunMK1 extends Item{
         }
         return heldItem;
     }
-/*
-
-    private final String INFO_NBT_TAG = "burnergunMK1InfoNBT";
-    private final String HANDLER_NBT_TAG = "burnergunMK1HandlerNBT";
-
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT BurnerGunNBTTag = new CompoundNBT();
-        stack.getCapability(BurnerGunMK1InfoProvider.burnerGunInfoMK1Capability, null).ifPresent((cap) -> {
-            BurnerGunNBTTag.put(INFO_NBT_TAG, BurnerGunMK1InfoProvider.burnerGunInfoMK1Capability.writeNBT(cap, null));
-        });
-        stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent((cap)->{
-            BurnerGunNBTTag.put(HANDLER_NBT_TAG, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.writeNBT(cap, null));
-        });
-        return BurnerGunNBTTag;
-    }
-
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (nbt != null){
-            stack.getCapability(BurnerGunMK1InfoProvider.burnerGunInfoMK1Capability, null).ifPresent((cap) -> {
-                BurnerGunMK1InfoProvider.burnerGunInfoMK1Capability.readNBT(cap, null, nbt.get(INFO_NBT_TAG));
-            });
-            stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent((cap)->{
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(cap, null, nbt.get(HANDLER_NBT_TAG));
-            });
-        }
-    }
-*/
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void refuel(){
         PacketHandler.sendToServer(new PacketRefuel());
@@ -222,9 +192,9 @@ public class BurnerGunMK1 extends Item{
         Optional<? extends AbstractCookingRecipe> recipe = world.getRecipeManager().getRecipeFor(RECIPE_TYPE, inv, world);
         if (recipe.isPresent()){
             ItemStack smelted = recipe.get().getResultItem().copy();
-            if (smeltList.contains(smelted.getItem()) && smeltWhitelist)
+            if (smeltList.contains(drop.getItem()) && smeltWhitelist)
                 return smelted;
-            else if (!smeltList.contains(smelted.getItem()) && !smeltWhitelist)
+            else if (!smeltList.contains(drop.getItem()) && !smeltWhitelist)
                 return smelted;
         }
         return drop;
@@ -301,8 +271,9 @@ public class BurnerGunMK1 extends Item{
                     || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
                     || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
                     || handler.getStackInSlot(0).getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem())){
-                if (BurnerGunNBT.getFuelValue(gun)+((UpgradeCard)handler.getStackInSlot(0).getItem()).getUpgrade().getExtraValue() < base_use_buffer && world.getMaxLocalRawBrightness((entity.blockPosition())) >= 8)
-                    BurnerGunNBT.setFuelValue(gun, BurnerGunNBT.getFuelValue(gun)+((UpgradeCard)handler.getStackInSlot(0).getItem()).getUpgrade().getExtraValue());
+                double fuel = BurnerGunNBT.getFuelValue(gun)+((UpgradeCard)handler.getStackInSlot(0).getItem()).getUpgrade().getExtraValue();
+                if (world.getMaxLocalRawBrightness((entity.blockPosition())) >= 8)
+                    BurnerGunNBT.setFuelValue(gun, fuel >= base_use_buffer ? base_use_buffer : fuel);
             }
         }
     }

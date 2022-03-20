@@ -3,7 +3,6 @@ package com.nindybun.burnergun.common.items.burnergunmk1;
 import com.nindybun.burnergun.common.containers.BurnerGunMK1Container;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
 import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
-import com.nindybun.burnergun.common.items.upgrades.Upgrade_Bag.UpgradeBag;
 import com.nindybun.burnergun.common.network.PacketHandler;
 import com.nindybun.burnergun.common.network.packets.PacketRefuel;
 import net.minecraft.item.ItemStack;
@@ -32,27 +31,16 @@ public class BurnerGunMK1Handler extends ItemStackHandler {
             throw new IllegalArgumentException("Invalid slot number: " + slot);
         }
         if (slot == 0 ) {
-            if (stack.getItem().equals(Upgrade.AMBIENCE_1.getCard().asItem())
-                    || stack.getItem().equals(Upgrade.AMBIENCE_2.getCard().asItem())
-                    || stack.getItem().equals(Upgrade.AMBIENCE_3.getCard().asItem())
-                    || stack.getItem().equals(Upgrade.AMBIENCE_4.getCard().asItem())
-                    || stack.getItem().equals(Upgrade.AMBIENCE_5.getCard().asItem()))
-                return true;
-            else if (isFuel(stack) || stack.getItem() == Items.BUCKET){
-                PacketHandler.sendToServer(new PacketRefuel());
+            if (    Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade())
+                    || isFuel(stack)
+                    || stack.getItem().equals(Items.BUCKET)){
                 return true;
             }
         }
-        if (slot != 0 && stack.getItem() instanceof UpgradeCard && !(stack.getItem() instanceof UpgradeBag)
-                && !stack.getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
-                && !stack.getItem().equals(Upgrade.AMBIENCE_2.getCard().getItem())
-                && !stack.getItem().equals(Upgrade.AMBIENCE_3.getCard().getItem())
-                && !stack.getItem().equals(Upgrade.AMBIENCE_4.getCard().getItem())
-                && !stack.getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem())){
-            if (getUpgradeByUpgrade(((UpgradeCard) stack.getItem()).getUpgrade()) != null){
-                return false;
-            }
-            return canInsert(stack);
+        if (slot != 0 && stack.getItem() instanceof UpgradeCard
+                && !(Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade()))
+                && getUpgradeByUpgrade(((UpgradeCard) stack.getItem()).getUpgrade()) != null){
+            return false;
         }
         return false;
     }
@@ -75,24 +63,6 @@ public class BurnerGunMK1Handler extends ItemStackHandler {
             }
         }
         return null;
-    }
-
-
-    public boolean canInsert(ItemStack item){
-        List<UpgradeCard> upgradeCards = getUpgrades();
-
-        if (!upgradeCards.isEmpty()){
-            for (UpgradeCard upgrade : upgradeCards) {
-                UpgradeCard upgradeItem = (UpgradeCard) item.getItem();
-                //Checks if the holding upgrade is Silk and if there is a fortune upgrade
-                //Checks if the holding upgrade is fortune and if there is a silk upgrade
-                if ((upgradeItem.getUpgrade().equals(Upgrade.SILK_TOUCH) && upgrade.getUpgrade().getBaseName().equals(Upgrade.FORTUNE_1.getBaseName())) ||
-                        (upgradeItem.getUpgrade().getBaseName().equals(Upgrade.FORTUNE_1.getBaseName()) && upgrade.getUpgrade().equals(Upgrade.SILK_TOUCH)) ){
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     @Override

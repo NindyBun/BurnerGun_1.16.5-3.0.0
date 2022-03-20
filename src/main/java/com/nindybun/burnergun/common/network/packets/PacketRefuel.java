@@ -55,7 +55,7 @@ public class PacketRefuel {
                     ItemStack containerItem = handler.getStackInSlot(0).getContainerItem();
                     handler.getStackInSlot(0).shrink(1);
                     if (!containerItem.isEmpty())
-                        PacketHandler.sendTo(new PacketClientRefuel(gun, containerItem), player);
+                        handler.insertItem(0, containerItem, false);
                 }
             });
 

@@ -62,7 +62,7 @@ public class PacketSpawnLightAtRaycast {
                             else
                                 return;
                         }
-                        PacketHandler.sendTo(new PacketClientPlayLightSound(), player);
+                        PacketHandler.sendTo(new PacketClientPlayLightSound(BurnerGunNBT.getVolume(gun)), player);
                         player.level.setBlockAndUpdate(ray.getBlockPos(), ModBlocks.LIGHT.get().defaultBlockState());
                         return;
                     }
@@ -73,7 +73,7 @@ public class PacketSpawnLightAtRaycast {
                             else
                                 return;
                         }
-                        PacketHandler.sendTo(new PacketClientPlayLightSound(), player);
+                        PacketHandler.sendTo(new PacketClientPlayLightSound(BurnerGunNBT.getVolume(gun)), player);
                         player.level.setBlockAndUpdate(ray.getBlockPos().relative(ray.getDirection()), ModBlocks.LIGHT.get().defaultBlockState());
                     }
                 }

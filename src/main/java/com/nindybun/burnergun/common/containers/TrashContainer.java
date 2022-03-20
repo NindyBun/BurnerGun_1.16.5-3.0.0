@@ -4,14 +4,16 @@ import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.common.items.upgrades.Trash.Trash;
 import com.nindybun.burnergun.common.items.upgrades.Trash.TrashHandler;
+import com.nindybun.burnergun.common.items.upgrades.UpgradeCard;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,11 +26,8 @@ public class TrashContainer extends Container {
 
     public TrashContainer(int windowId, PlayerInventory playerInventory, TrashHandler handler){
         super(ModContainers.TRASH_CONTAINER.get(), windowId);
-        this.handler = handler;
-        this.setup(playerInventory);
+        this.setup(new InvWrapper(playerInventory), handler);
     }
-
-    private final TrashHandler handler;
 
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -53,11 +52,11 @@ public class TrashContainer extends Container {
     private final int HOTBAR_XPOS = 8;
     private final int HOTBAR_YPOS = 142;
 
-    private void setup(PlayerInventory playerInv){
+    private void setup(InvWrapper playerInv, IItemHandler handler){
         // Add the players hotbar to the gui - the [xpos, ypos] location of each item
         for (int x = 0; x < HOTBAR_SLOT_COUNT; x++) {
             int slotNumber = x;
-            addSlot(new Slot(playerInv, slotNumber, HOTBAR_XPOS + SLOT_X_SPACING * x, HOTBAR_YPOS));
+            addSlot(new SlotItemHandler(playerInv, slotNumber, HOTBAR_XPOS + SLOT_X_SPACING * x, HOTBAR_YPOS));
         }
 
         // Add the rest of the player's inventory to the gui
@@ -66,14 +65,14 @@ public class TrashContainer extends Container {
                 int slotNumber = HOTBAR_SLOT_COUNT + y * PLAYER_INVENTORY_COLUMN_COUNT + x;
                 int xpos = PLAYER_INVENTORY_XPOS + x * SLOT_X_SPACING;
                 int ypos = PLAYER_INVENTORY_YPOS + y * SLOT_Y_SPACING;
-                addSlot(new Slot(playerInv, slotNumber, xpos, ypos));
+                addSlot(new SlotItemHandler(playerInv, slotNumber, xpos, ypos));
             }
         }
 
         int bagSlotCount = handler.getSlots();
         if (bagSlotCount < 1 || bagSlotCount > MAX_EXPECTED_HANDLER_SLOT_COUNT) {
             LOGGER.warn("Unexpected invalid slot count in TrashHandler(" + bagSlotCount + ")");
-            bagSlotCount = MathHelper.clamp(bagSlotCount, 1, MAX_EXPECTED_HANDLER_SLOT_COUNT);
+            bagSlotCount = Math.max(1, Math.min(MAX_EXPECTED_HANDLER_SLOT_COUNT, bagSlotCount));
         }
 
         // Add the tile inventory container to the gui
@@ -83,7 +82,7 @@ public class TrashContainer extends Container {
             int bagCol = bagSlot % HANDLER_SLOTS_PER_ROW;
             int xpos = HANDLER_INVENTORY_XPOS + SLOT_X_SPACING * bagCol;
             int ypos = HANDLER_INVENTORY_YPOS + SLOT_Y_SPACING * bagRow;
-            addSlot(new SlotItemHandler(handler, slotNumber, xpos, ypos));
+            addSlot(new TrashGhostSlot(handler, slotNumber, xpos, ypos));
         }
     }
 
@@ -101,9 +100,40 @@ public class TrashContainer extends Container {
 
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
-        super.quickMoveStack(playerIn, index);
-        return ItemStack.EMPTY;
+    public ItemStack quickMoveStack(PlayerEntity playrIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+
+        if (slot != null && slot.hasItem()) {
+            ItemStack currentStack = slot.getItem();
+
+            // Stop our items at the very least :P
+            if (currentStack.getItem() instanceof BurnerGunMK1 || currentStack.getItem() instanceof UpgradeCard || currentStack.getItem() instanceof BurnerGunMK2)
+                return itemstack;
+
+            if (currentStack.isEmpty())
+                return itemstack;
+
+            // Find the first empty slot number
+            int slotNumber = -1;
+            for (int i = 36; i <= 63; i++) {
+                if (this.slots.get(i).getItem().isEmpty()) {
+                    slotNumber = i;
+                    break;
+                } else {
+                    if (this.slots.get(i).getItem().getItem() == currentStack.getItem()) {
+                        break;
+                    }
+                }
+            }
+
+            if (slotNumber == -1)
+                return itemstack;
+
+            this.slots.get(slotNumber).set(currentStack.copy().split(1));
+        }
+
+        return itemstack;
     }
 
     private static final Logger LOGGER = LogManager.getLogger();
