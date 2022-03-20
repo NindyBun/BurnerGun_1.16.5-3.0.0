@@ -1,13 +1,14 @@
 package com.nindybun.burnergun.client.renderer;
 
 import com.nindybun.burnergun.common.BurnerGun;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
+import io.netty.util.internal.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.math.MathContext;
 
 @Mod.EventBusSubscriber(modid = BurnerGun.MOD_ID, value = Dist.CLIENT)
 public class FuelValueRenderer {
@@ -44,9 +46,8 @@ public class FuelValueRenderer {
     }
 
     public static void renderFuel(RenderGameOverlayEvent.Post event, ItemStack stack){
-        BurnerGunMK1Info info = stack.getCapability(BurnerGunMK1InfoProvider.burnerGunInfoMK1Capability, null).orElseThrow(()->new IllegalArgumentException("No capability found!"));
         FontRenderer fontRenderer = Minecraft.getInstance().font;
-        int level = (int)info.getFuelValue();
+        int level = (int) BurnerGunNBT.getFuelValue(stack);
         Color color;
         if (level > base_buffer*3/4)
                 color = Color.GREEN;

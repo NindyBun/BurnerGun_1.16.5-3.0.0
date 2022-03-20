@@ -54,7 +54,7 @@ public class AutoSmelt extends UpgradeCard {
         return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
     }
 
-    private final String HANDLER_NBT_TAG = "autosmeltHandlerNBT";
+    /*private final String HANDLER_NBT_TAG = "autosmeltHandlerNBT";
 
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
@@ -72,5 +72,5 @@ public class AutoSmelt extends UpgradeCard {
                 CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.readNBT(cap, null, nbt.get(HANDLER_NBT_TAG));
             });
         }
-    }
+    }*/
 }

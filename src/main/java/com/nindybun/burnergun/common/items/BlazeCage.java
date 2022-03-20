@@ -27,8 +27,7 @@ public class BlazeCage extends Item {
             if(entity.getEntity().isAlive() && entity.getType().equals(EntityType.BLAZE)){
                 player.getItemInHand(hand).shrink(1);
                 if (player.getItemInHand(hand).isEmpty()){
-                    IItemHandler playerHandler = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
-                    playerHandler.insertItem(hand.equals(Hand.MAIN_HAND) ? EquipmentSlotType.MAINHAND.getIndex() : EquipmentSlotType.OFFHAND.getIndex(), new ItemStack(ModItems.CAGED_BLAZE.get()), false);
+                    player.setItemInHand(hand.equals(Hand.MAIN_HAND) ? Hand.MAIN_HAND : Hand.OFF_HAND, new ItemStack(ModItems.CAGED_BLAZE.get()));
                 }
                 else if(!player.inventory.add(new ItemStack(ModItems.CAGED_BLAZE.get())))
                     player.drop(new ItemStack(ModItems.CAGED_BLAZE.get()), false);

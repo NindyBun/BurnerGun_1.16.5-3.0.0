@@ -3,10 +3,7 @@ package com.nindybun.burnergun.client.renderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.nindybun.burnergun.common.BurnerGun;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1InfoProvider;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2InfoProvider;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.util.WorldUtil;
@@ -15,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.debug.CollisionBoxDebugRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -69,25 +67,19 @@ public class BlockRenderer {
         renderTypeBuffer.endBatch(RenderType.lines());
     }
 
-    public static void drawArea(ItemStack gun, PlayerEntity player, AxisAlignedBB test, MatrixStack matrixStack){
-        BurnerGunMK1Info infoMK1 = gun.getCapability(BurnerGunMK1InfoProvider.burnerGunInfoMK1Capability).orElse(null);
-        BurnerGunMK2Info infoMK2 = gun.getCapability(BurnerGunMK2InfoProvider.burnerGunInfoMK2Capability).orElse(null);
-        BlockRayTraceResult ray = WorldUtil.getLookingAt(player.level, player, RayTraceContext.FluidMode.NONE, infoMK1 != null ? infoMK1.getRaycastRange() : infoMK2.getRaycastRange());
+    public static void drawArea(ItemStack gun, PlayerEntity player, MatrixStack matrixStack){
+        BlockRayTraceResult ray = WorldUtil.getLookingAt(player.level, player, RayTraceContext.FluidMode.NONE, BurnerGunNBT.getRaycast(gun));
         if (player.level.getBlockState(ray.getBlockPos()) == Blocks.AIR.defaultBlockState())
             return;
-        int xRad = infoMK1 != null ? infoMK1.getHorizontal() : infoMK2.getHorizontal();
-        int yRad = infoMK1 != null ? infoMK1.getVertical() : infoMK2.getVertical();
+        int xRad = BurnerGunNBT.getHorizontal(gun);
+        int yRad = BurnerGunNBT.getVertical(gun);
         BlockPos aimedPos = ray.getBlockPos();
         if (ray.getType() != RayTraceResult.Type.BLOCK)
             return;
         Vector3d size = WorldUtil.getDim(ray, xRad, yRad, player);
-        float[] color = new float[3];
-        color[0] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Red") : infoMK2.getColor().getCompound(0).getFloat("Red");
-        color[1] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Green") : infoMK2.getColor().getCompound(0).getFloat("Green");
-        color[2] = infoMK1 != null ? infoMK1.getColor().getCompound(0).getFloat("Blue") : infoMK2.getColor().getCompound(0).getFloat("Blue");
-        test = player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds();
-        drawBoundingBoxAtBlockPos(matrixStack, test, color[0], color[1], color[2], 1.0F, aimedPos.relative(ray.getDirection()), aimedPos.relative(ray.getDirection()));
-        drawBoundingBoxAtBlockPos(matrixStack, test, color[0], color[1], color[2], 1.0F, aimedPos, aimedPos.relative(ray.getDirection()));
+        float[] color = BurnerGunNBT.getColor(gun);
+        drawBoundingBoxAtBlockPos(matrixStack, player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds(), color[0], color[1], color[2], 1.0F, aimedPos.relative(ray.getDirection()), aimedPos.relative(ray.getDirection()));
+        drawBoundingBoxAtBlockPos(matrixStack, player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds(), color[0], color[1], color[2], 1.0F, aimedPos, aimedPos.relative(ray.getDirection()));
         if (player.isCrouching())
             return;
         for (int xPos = aimedPos.getX() - (int)size.x(); xPos <= aimedPos.getX() + (int)size.x(); ++xPos){
@@ -110,8 +102,7 @@ public class BlockRenderer {
             return;
         gameRenderer.resetProjectionMatrix(e.getProjectionMatrix());
 
-        final AxisAlignedBB test = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-        drawArea(gun, player, test, e.getMatrixStack());
+        drawArea(gun, player, e.getMatrixStack());
 
         //drawBoundingBoxAtBlockPos(e.getMatrixStack(), test, 1.0F, 0.0F, 0.0F, 1.0F, new BlockPos(0, 65, 0), new BlockPos(0, 65, 0));
         //drawBoundingBoxAtBlockPos(e.getMatrixStack(), test, 1.0F, 0.0F, 0.0F, 1.0F, new BlockPos(1, 65, 0), new BlockPos(0, 65, 0));

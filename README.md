@@ -17,7 +17,9 @@
 - Balanced? ¯\\\_(ツ)_/¯
 
 ## Credits
-- [NindyBun](https://github.com/NindyBun/BurnerGun) `Author, Developer`
+- NindyBun `Author, Developer`
+  - [Version 1.16.5](https://github.com/NindyBun/BurnerGun_1.16.5-3.0.0)
+  - [Version 1.18.1](https://github.com/NindyBun/BurnerGun_1.18.1)
 - [Forge Devs](https://minecraftforge.net) `API`
 - [Forge Community](https://forums.minecraftforge.net/) `Community`
 

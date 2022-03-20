@@ -1,10 +1,10 @@
 package com.nindybun.burnergun.common.network.packets;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -34,15 +34,13 @@ public class PacketClientPlayLightSound {
         public static void handle(PacketClientPlayLightSound msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    PlayerEntity player = Minecraft.getInstance().player;
+                    ClientPlayerEntity player = Minecraft.getInstance().player;
                     if (player == null)
                         return;
                     ItemStack gun = !BurnerGunMK2.getGun(player).isEmpty() ? BurnerGunMK2.getGun(player) : BurnerGunMK1.getGun(player);
                     if (gun.isEmpty())
                         return;
-                    BurnerGunMK1Info infoMK1 = BurnerGunMK1.getInfo(gun);
-                    BurnerGunMK2Info infoMK2 = BurnerGunMK2.getInfo(gun);
-                    player.playSound(SoundEvents.WOOL_PLACE, (infoMK1 != null ? infoMK1.getVolume() : infoMK2.getVolume())*0.5f, 1.0f);
+                    player.playSound(SoundEvents.WOOL_PLACE, BurnerGunNBT.getVolume(gun) *0.5f, 1.0f);
                 });
             });
             ctx.get().setPacketHandled(true);

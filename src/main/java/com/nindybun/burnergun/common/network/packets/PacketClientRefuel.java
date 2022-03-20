@@ -3,6 +3,7 @@ package com.nindybun.burnergun.common.network.packets;
 import com.nindybun.burnergun.client.screens.ModScreens;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -38,7 +39,7 @@ public class PacketClientRefuel {
         public static void handle(PacketClientRefuel msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    PlayerEntity player = Minecraft.getInstance().player;
+                    ClientPlayerEntity player = Minecraft.getInstance().player;
                     if (player == null)
                         return;
                     IItemHandler handler = BurnerGunMK1.getHandler(gun);

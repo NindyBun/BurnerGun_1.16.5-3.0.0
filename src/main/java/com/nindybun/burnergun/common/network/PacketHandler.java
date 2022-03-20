@@ -29,7 +29,6 @@ public class PacketHandler {
         INSTANCE.registerMessage(id++, PacketOpenTrashGui.class, PacketOpenTrashGui::encode, PacketOpenTrashGui::decode, PacketOpenTrashGui.Handler::handle);
         INSTANCE.registerMessage(id++, PacketOpenAutoSmeltGui.class, PacketOpenAutoSmeltGui::encode, PacketOpenAutoSmeltGui::decode, PacketOpenAutoSmeltGui.Handler::handle);
         INSTANCE.registerMessage(id++, PacketOpenUpgradeBagGui.class, PacketOpenUpgradeBagGui::encode, PacketOpenUpgradeBagGui::decode, PacketOpenUpgradeBagGui.Handler::handle);
-        INSTANCE.registerMessage(id++, PacketChangeVolume.class, PacketChangeVolume::encode, PacketChangeVolume::decode, PacketChangeVolume.Handler::handle);
         INSTANCE.registerMessage(id++, PacketToggleTrashFilter.class, PacketToggleTrashFilter::encode, PacketToggleTrashFilter::decode, PacketToggleTrashFilter.Handler::handle);
         INSTANCE.registerMessage(id++, PacketToggleSmeltFilter.class, PacketToggleSmeltFilter::encode, PacketToggleSmeltFilter::decode, PacketToggleSmeltFilter.Handler::handle);
         INSTANCE.registerMessage(id++, PacketUpdateUpgrade.class, PacketUpdateUpgrade::encode, PacketUpdateUpgrade::decode, PacketUpdateUpgrade.Handler::handle);

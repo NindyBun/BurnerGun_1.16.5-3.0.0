@@ -4,8 +4,7 @@ package com.nindybun.burnergun.client.screens;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.nindybun.burnergun.client.screens.buttons.ToggleButton;
 import com.nindybun.burnergun.common.BurnerGun;
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
@@ -56,17 +55,15 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
     protected burnergunSettingsScreen(ItemStack gun) {
         super(new StringTextComponent("Title"));
         this.gun = gun;
-        BurnerGunMK1Info infoMK1 = gun.getItem() instanceof BurnerGunMK1 ? BurnerGunMK1.getInfo(gun) : null;
-        BurnerGunMK2Info infoMK2 = gun.getItem() instanceof BurnerGunMK2 ? BurnerGunMK2.getInfo(gun) : null;
-        this.volume = infoMK1 != null ? infoMK1.getVolume() : infoMK2.getVolume();
-        this.vertical = infoMK1 != null ? infoMK1.getVertical() : infoMK2.getVertical();
-        this.maxVertical = infoMK1 != null ? infoMK1.getMaxVertical() : infoMK2.getMaxVertical();
-        this.horizontal = infoMK1 != null ? infoMK1.getHorizontal() : infoMK2.getHorizontal();
-        this.maxHorizontal = infoMK1 != null ? infoMK1.getMaxHorizontal() : infoMK2.getMaxHorizontal();
-        this.raycastRange = infoMK1 != null ? infoMK1.getRaycastRange() : infoMK2.getRaycastRange();
-        this.maxRaycastRange = infoMK1 != null ? infoMK1.getMaxRaycastRange() : infoMK2.getMaxRaycastRange();
-        this.trashFilterWhitelist = infoMK1 != null ? infoMK1.getTrashIsWhitelist() : infoMK2.getTrashIsWhitelist();
-        this.smeltFilterWhitelist = infoMK1 != null ? infoMK1.getSmeltIsWhitelist() : infoMK2.getSmeltIsWhitelist();
+        this.volume = BurnerGunNBT.getVolume(gun);
+        this.vertical = BurnerGunNBT.getVertical(gun);
+        this.maxVertical = BurnerGunNBT.getMaxVertical(gun);
+        this.horizontal = BurnerGunNBT.getHorizontal(gun);
+        this.maxHorizontal = BurnerGunNBT.getMaxHorizontal(gun);
+        this.raycastRange = BurnerGunNBT.getRaycast(gun);
+        this.maxRaycastRange = BurnerGunNBT.getMaxRaycast(gun);
+        this.trashFilterWhitelist = BurnerGunNBT.getTrashWhitelist(gun);
+        this.smeltFilterWhitelist = BurnerGunNBT.getSmeltWhitelist(gun);
 
         toggleableList.clear();
         toggleableList = UpgradeUtil.getToggleableUpgrades(gun);

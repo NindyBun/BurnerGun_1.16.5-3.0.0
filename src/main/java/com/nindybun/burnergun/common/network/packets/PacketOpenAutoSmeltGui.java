@@ -1,9 +1,8 @@
 package com.nindybun.burnergun.common.network.packets;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
 import com.nindybun.burnergun.common.containers.AutoSmeltContainer;
 import com.nindybun.burnergun.common.containers.TrashContainer;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
 import com.nindybun.burnergun.common.items.upgrades.Auto_Smelt.AutoSmelt;
@@ -47,9 +46,7 @@ public class PacketOpenAutoSmeltGui {
                 ItemStack gun = !BurnerGunMK2.getGun(player).isEmpty() ? BurnerGunMK2.getGun(player) : BurnerGunMK1.getGun(player);
                 ItemStack smelt = player.getMainHandItem();
                 if (!gun.isEmpty()){
-                    BurnerGunMK1Info infoMK1 = BurnerGunMK1.getInfo(gun);
-                    BurnerGunMK2Info infoMK2 = BurnerGunMK2.getInfo(gun);
-                    List<Upgrade> upgradeList = UpgradeUtil.getUpgradesFromNBT(infoMK1 != null ? infoMK1.getUpgradeNBTList() : infoMK2.getUpgradeNBTList());
+                    List<Upgrade> upgradeList = BurnerGunNBT.getUpgrades(gun);
                     if (upgradeList.contains(Upgrade.AUTO_SMELT))
                         smelt = UpgradeUtil.getStackByUpgrade(gun, Upgrade.AUTO_SMELT);
                 }

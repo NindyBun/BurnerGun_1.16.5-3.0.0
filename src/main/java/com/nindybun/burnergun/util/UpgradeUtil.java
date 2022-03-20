@@ -1,6 +1,5 @@
 package com.nindybun.burnergun.util;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk2.BurnerGunMK2Info;
 import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.burnergunmk2.BurnerGunMK2;
@@ -126,10 +125,6 @@ public class UpgradeUtil {
         return upgradeList;
     }
 
-    public static List<Upgrade> getUpgradesFromGun(ItemStack stack){
-        ListNBT nbt = BurnerGunMK1.getInfo(stack) != null ? BurnerGunMK1.getInfo(stack).getUpgradeNBTList() : BurnerGunMK2.getInfo(stack).getUpgradeNBTList();
-        return getUpgradesFromNBT(nbt);
-    }
     public static boolean containsUpgradeFromList(List<Upgrade> upgradeList, Upgrade upgrade){
         for (Upgrade index : upgradeList) {
             if (index.getBaseName().equals(upgrade.getBaseName()))
@@ -138,12 +133,12 @@ public class UpgradeUtil {
         return false;
     }
 
-    public static List<Upgrade> getToggleableUpgrades(ItemStack stack){
-        return getUpgradesFromGun(stack).stream().filter(Upgrade::isToggleable).collect(Collectors.toList());
+    public static List<Upgrade> getToggleableUpgrades(ItemStack gun){
+        return BurnerGunNBT.getUpgrades(gun).stream().filter(Upgrade::isToggleable).collect(Collectors.toList());
     }
 
-    public static List<Upgrade> getActiveUpgrades(ItemStack stack){
-        return getUpgradesFromGun(stack).stream().filter(Upgrade::isActive).collect(Collectors.toList());
+    public static List<Upgrade> getActiveUpgrades(ItemStack gun){
+        return BurnerGunNBT.getUpgrades(gun).stream().filter(Upgrade::isActive).collect(Collectors.toList());
     }
 
     public static List<Upgrade> getUpgrades(ItemStack stack){

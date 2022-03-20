@@ -1,6 +1,6 @@
 package com.nindybun.burnergun.common.network.packets;
 
-import com.nindybun.burnergun.common.capabilities.burnergunmk1.BurnerGunMK1Info;
+import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
 import com.nindybun.burnergun.common.items.upgrades.Upgrade;
 import com.nindybun.burnergun.common.network.PacketHandler;
@@ -40,7 +40,6 @@ public class PacketRefuel {
                 if (gun.isEmpty())
                     return;
                 IItemHandler handler = BurnerGunMK1.getHandler(gun);
-                BurnerGunMK1Info info = BurnerGunMK1.getInfo(gun);
                 ItemStack stack = handler.getStackInSlot(0);
                 if (stack == ItemStack.EMPTY || stack.getItem() == Items.BUCKET
                         || stack.getItem().equals(Upgrade.AMBIENCE_1.getCard().getItem())
@@ -50,9 +49,9 @@ public class PacketRefuel {
                         || stack.getItem().equals(Upgrade.AMBIENCE_5.getCard().getItem()))
                     return;
                 while (handler.getStackInSlot(0).getCount() > 0){
-                    if (info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > BurnerGunMK1.base_use_buffer)
+                    if (BurnerGunNBT.getFuelValue(gun) + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > BurnerGunMK1.base_use_buffer)
                         break;
-                    info.setFuelValue(info.getFuelValue() + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)));
+                    BurnerGunNBT.setFuelValue(gun, BurnerGunNBT.getFuelValue(gun) + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)));
                     ItemStack containerItem = handler.getStackInSlot(0).getContainerItem();
                     handler.getStackInSlot(0).shrink(1);
                     if (!containerItem.isEmpty())
