@@ -45,7 +45,7 @@ public class PacketRefuel {
                 ItemStack stack = handler.getStackInSlot(0);
                 if (stack == ItemStack.EMPTY
                         || stack.getItem() == Items.BUCKET
-                        || Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade()))
+                        || handler.getStackInSlot(0).getItem() instanceof UpgradeCard)
                     return;
                 while (handler.getStackInSlot(0).getCount() > 0 && ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > 0){
                     if (BurnerGunNBT.getFuelValue(gun) + net.minecraftforge.common.ForgeHooks.getBurnTime(handler.getStackInSlot(0)) > BurnerGunMK1.base_use_buffer)

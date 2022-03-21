@@ -183,8 +183,8 @@ public class UpgradeUtil {
             CompoundNBT compound = (CompoundNBT) e;
             String name = compound.getString(KEY_UPGRADE);
             boolean isEnabled = compound.getBoolean(KEY_ENABLED);
-            if( (name.contains(Upgrade.FORTUNE_1.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.SILK_TOUCH) )
-                    || (name.equals(Upgrade.SILK_TOUCH.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.FORTUNE_1) ))
+            if( (name.contains(Upgrade.FORTUNE_1.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.SILK_TOUCH) && upgrade.isActive())
+                    || (name.equals(Upgrade.SILK_TOUCH.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.FORTUNE_1) && upgrade.isActive()))
                 compound.putBoolean(KEY_ENABLED, false);
 
             if( name.equals(upgrade.getName()) )
