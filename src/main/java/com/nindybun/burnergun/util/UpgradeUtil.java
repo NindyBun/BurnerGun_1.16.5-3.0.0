@@ -21,6 +21,8 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UpgradeUtil {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final String KEY_FILTER = "filter";
     private static final String KEY_UPGRADE = "upgrade";
     private static final String KEY_ENABLED = "enabled";
@@ -179,17 +182,29 @@ public class UpgradeUtil {
 
     public static void updateUpgrade(ItemStack stack, Upgrade upgrade){
         ListNBT upgrades = stack.getOrCreateTag().getList(BurnerGunNBT.UPGRADES, Constants.NBT.TAG_COMPOUND);
+        List<Upgrade> upgradeList = getUpgrades(stack);
+        upgradeList.forEach(indexUpgrade -> {
+            if ( (indexUpgrade.lazyIs(Upgrade.FORTUNE_1) && indexUpgrade.isActive() && upgrade.lazyIs(Upgrade.SILK_TOUCH))
+                || (indexUpgrade.lazyIs(Upgrade.SILK_TOUCH) && indexUpgrade.isActive() && upgrade.lazyIs(Upgrade.FORTUNE_1)) )
+                indexUpgrade.setActive(false);
+            if (upgrade.lazyIs(indexUpgrade)){
+                indexUpgrade.setActive(!indexUpgrade.isActive());
+            }
+        });
         upgrades.forEach(e -> {
             CompoundNBT compound = (CompoundNBT) e;
             String name = compound.getString(KEY_UPGRADE);
             boolean isEnabled = compound.getBoolean(KEY_ENABLED);
-            if( (name.contains(Upgrade.FORTUNE_1.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.SILK_TOUCH) && upgrade.isActive())
-                    || (name.equals(Upgrade.SILK_TOUCH.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.FORTUNE_1) && upgrade.isActive()))
+            if( (name.contains(Upgrade.FORTUNE_1.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.SILK_TOUCH))
+                    || (name.equals(Upgrade.SILK_TOUCH.getBaseName()) && isEnabled && upgrade.lazyIs(Upgrade.FORTUNE_1)))
                 compound.putBoolean(KEY_ENABLED, false);
 
-            if( name.equals(upgrade.getName()) )
+            if( name.equals(upgrade.getName()) ){
                 compound.putBoolean(KEY_ENABLED, !compound.getBoolean(KEY_ENABLED));
+            }
+
         });
+
     }
 
 }

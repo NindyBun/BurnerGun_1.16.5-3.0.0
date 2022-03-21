@@ -46,3 +46,4 @@
 - Ported the 1.18.1 version to here
 ## v3.3.0
 - Ported 1.18.1-4.1.1 version to here
+- Fixed upgrade toggling

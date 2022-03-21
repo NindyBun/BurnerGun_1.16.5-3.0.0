@@ -2,6 +2,8 @@ package com.nindybun.burnergun.client.screens;
 
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.nindybun.burnergun.client.screens.buttons.ToggleButton;
 import com.nindybun.burnergun.common.BurnerGun;
 import com.nindybun.burnergun.common.items.BurnerGunNBT;
@@ -20,6 +22,7 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.Slider;
@@ -82,12 +85,9 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         }
     }
 
-    private boolean toggleUpgrade(Upgrade upgrade, boolean update) {
-        if (update){
-            this.updateButtons(upgrade);
-            PacketHandler.sendToServer(new PacketUpdateUpgrade(upgrade.getName()));
-        }
-        return upgrade.isActive();
+    private void toggleUpgrade(Upgrade upgrade) {
+        this.updateButtons(upgrade);
+        PacketHandler.sendToServer(new PacketUpdateUpgrade(upgrade.getName()));
     }
 
     @Override
@@ -103,13 +103,19 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         int index = 0, x = midX+15, y = midY-((yy*20)+((yy-1)*5))/2;
 
         if (containsTrash){
-            ToggleButton btn = new ToggleButton(x, y, new StringTextComponent(Upgrade.TRASH.getName()), new ResourceLocation(BurnerGun.MOD_ID, "textures/items/" + Upgrade.TRASH.getName() + "_upgrade.png"), send -> this.toggleUpgrade(UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.TRASH), send));
+            ToggleButton btn = new ToggleButton(x, y, 20, 20, new ResourceLocation(BurnerGun.MOD_ID, "textures/items/" + Upgrade.TRASH.getName() + "_upgrade.png"), UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.TRASH).isActive(),
+                    (button) -> {
+                        ((ToggleButton)button).setEnabled(!((ToggleButton)button).isEnabled());
+                        this.toggleUpgrade(UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.TRASH));
+                    });
             addButton(btn);
             upgradeButtons.put(UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.TRASH), btn);
-            addButton(new Button(x+25, y, 95, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.edit_filter"), (button) -> {
+            addButton(new Button(x+25, y, 95, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.edit_filter"),
+                    (button) -> {
                 PacketHandler.sendToServer(new PacketOpenTrashGui());
             }));
-            addButton(new WhitelistButton(x+125, y, 20, 20, trashFilterWhitelist, (button) -> {
+            addButton(new WhitelistButton(x+125, y, 20, 20, trashFilterWhitelist,
+                    (button) -> {
                 trashFilterWhitelist = !trashFilterWhitelist;
                 ((WhitelistButton) button).setWhitelist(trashFilterWhitelist);
                 PacketHandler.sendToServer(new PacketToggleTrashFilter());
@@ -117,7 +123,11 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         }
 
         if (containsSmelt){
-            ToggleButton btn = new ToggleButton(x, y+(containsTrash?25:0), new StringTextComponent(Upgrade.AUTO_SMELT.getName()), new ResourceLocation(BurnerGun.MOD_ID, "textures/items/" + Upgrade.AUTO_SMELT.getName() + "_upgrade.png"), send -> this.toggleUpgrade(UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.AUTO_SMELT), send));
+            ToggleButton btn = new ToggleButton(x, y+(containsTrash?25:0), 20, 20, new ResourceLocation(BurnerGun.MOD_ID, "textures/items/" + Upgrade.AUTO_SMELT.getName() + "_upgrade.png"), UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.AUTO_SMELT).isActive(),
+                    (button) -> {
+                ((ToggleButton)button).setEnabled(!((ToggleButton)button).isEnabled());
+                this.toggleUpgrade(UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.AUTO_SMELT));
+            });
             addButton(btn);
             upgradeButtons.put(UpgradeUtil.getUpgradeFromListByUpgrade(toggleableList, Upgrade.AUTO_SMELT), btn);
             addButton(new Button(x+25, y+(containsTrash?25:0), 95, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.edit_filter"), (button) -> {
@@ -132,7 +142,11 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
 
         for (Upgrade upgrade : toggleableList){
             if (!upgrade.equals(Upgrade.AUTO_SMELT) && !upgrade.equals(Upgrade.TRASH)){
-                ToggleButton btn = new ToggleButton(x + (index*25), y+(containsTrash?25:0)+(containsSmelt?25:0), new StringTextComponent(upgrade.getName()), new ResourceLocation(BurnerGun.MOD_ID, "textures/items/" + upgrade.getName() + "_upgrade.png"), send -> this.toggleUpgrade(upgrade, send));
+                ToggleButton btn = new ToggleButton(x + (index*25), y+(containsTrash?25:0)+(containsSmelt?25:0), 20, 20, new ResourceLocation(BurnerGun.MOD_ID, "textures/items/" + upgrade.getName() + "_upgrade.png"), upgrade.isActive(),
+                        (button) -> {
+                            ((ToggleButton)button).setEnabled(!((ToggleButton)button).isEnabled());
+                            this.toggleUpgrade(upgrade);
+                        });
                 addButton(btn);
                 upgradeButtons.put(upgrade, btn);
                 index++;
@@ -254,7 +268,39 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         }
 
         public void setWhitelist(boolean whitelist) {
-            isWhitelist = whitelist;
+            this.isWhitelist = whitelist;
         }
+    }
+
+    public static final class ToggleButton extends Button {
+        private boolean isEnabled;
+        private ResourceLocation texture;
+
+        public ToggleButton(int widthIn, int heightIn, int width, int height, ResourceLocation texture, boolean isEnabled, IPressable onPress) {
+            super(widthIn, heightIn, width, height, new StringTextComponent(""), onPress);
+            this.isEnabled = isEnabled;
+            this.texture = texture;
+        }
+
+        @Override
+        public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+            Color activeColor = this.isEnabled ? Color.GREEN : Color.RED;
+
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SourceFactor.ONE.value, GlStateManager.DestFactor.ZERO.value);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value);
+
+            RenderSystem.disableTexture();
+            RenderSystem.color4f(activeColor.getRed() / 255f, activeColor.getGreen() / 255f, activeColor.getBlue() / 255f, this.isEnabled ? .4f : .6f);
+            blit(stack, this.x, this.y, 0, 0, this.width, this.height);
+            RenderSystem.enableTexture();
+
+            RenderSystem.color4f(1f, 1f, 1f, 1f);
+            Minecraft.getInstance().getTextureManager().bind(this.texture);
+            blit(stack, this.x+2, this.y+2, 0, 0, 16, 16, 16, 16);
+        }
+
+        public void setEnabled(boolean enable) { this.isEnabled = enable; }
+        public boolean isEnabled() {return this.isEnabled; }
     }
 }
