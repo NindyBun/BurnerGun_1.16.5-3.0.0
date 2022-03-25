@@ -42,6 +42,7 @@ public class PacketChangeSettings {
                 BurnerGunNBT.setRaycast(gun, msg.nbt.getInt("Raycast"));
                 BurnerGunNBT.setVertical(gun, msg.nbt.getInt("Vertical"));
                 BurnerGunNBT.setHorizontal(gun, msg.nbt.getInt("Horizontal"));
+                BurnerGunNBT.setCollectedBlocks(gun, msg.nbt.getInt("Collected_Blocks"));
             });
             ctx.get().setPacketHandled(true);
         }

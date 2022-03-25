@@ -4,7 +4,6 @@ package com.nindybun.burnergun.client.screens;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.nindybun.burnergun.client.screens.buttons.ToggleButton;
 import com.nindybun.burnergun.common.BurnerGun;
 import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
@@ -21,19 +20,17 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.Color;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
     private ItemStack gun;
@@ -45,14 +42,17 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
                 vertical,
                 maxVertical,
                 horizontal,
-                maxHorizontal;
+                maxHorizontal,
+                collectedBlocks,
+                maxCollectedBlocks;
     private float volume;
     private boolean trashFilterWhitelist, containsTrash;
     private boolean smeltFilterWhitelist, containsSmelt;
     private Slider  raycastSlider,
                     volumeSlider,
                     verticalSlider,
-                    horizontalSlider;
+                    horizontalSlider,
+                    collectedBlocksSlider;
     private Button colorButton;
 
     protected burnergunSettingsScreen(ItemStack gun) {
@@ -67,6 +67,8 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         this.maxRaycastRange = BurnerGunNBT.getMaxRaycast(gun);
         this.trashFilterWhitelist = BurnerGunNBT.getTrashWhitelist(gun);
         this.smeltFilterWhitelist = BurnerGunNBT.getSmeltWhitelist(gun);
+        this.collectedBlocks = BurnerGunNBT.getCollectedBlocks(gun);
+        this.maxCollectedBlocks = BurnerGunNBT.getMaxCollectedBlocks(gun);
 
         toggleableList.clear();
         toggleableList = UpgradeUtil.getToggleableUpgrades(gun);
@@ -162,6 +164,7 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         settings.add(raycastSlider = new Slider(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.raycast"), new StringTextComponent(""), 1, maxRaycastRange, raycastRange, false, true, slider -> {}, this));
         settings.add(verticalSlider = new Slider(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.vertical"), new StringTextComponent(""), 0, maxVertical, vertical, false, true, slider -> {}, this));
         settings.add(horizontalSlider = new Slider(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.horizontal"), new StringTextComponent(""), 0, maxHorizontal, horizontal, false, true, slider -> {}, this));
+        settings.add(collectedBlocksSlider = new Slider(midX - 140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.collectedBlocks"), new StringTextComponent(""), 0, maxCollectedBlocks, collectedBlocks, false, true, slider -> {}, this));
         settings.add(colorButton = new Button(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.color"), button -> {
             ModScreens.openColorScreen(gun);
         }));
@@ -185,6 +188,7 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         nbt.putInt("Raycast", raycastRange);
         nbt.putInt("Vertical", vertical);
         nbt.putInt("Horizontal", horizontal);
+        nbt.putInt("Collected_Blocks", collectedBlocks);
         PacketHandler.sendToServer(new PacketChangeSettings(nbt));
         super.removed();
     }
@@ -195,25 +199,30 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         raycastSlider.dragging = false;
         verticalSlider.dragging = false;
         horizontalSlider.dragging = false;
+        collectedBlocksSlider.dragging = false;
         return false;
     }
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if( volumeSlider.isMouseOver(mouseX, mouseY) ) {
-            volumeSlider.sliderValue += (.01f * (delta > 0 ? 1 : -1));
+        if (volumeSlider.isMouseOver(mouseX, mouseY)) {
+            volumeSlider.sliderValue += (1f/100 * (delta > 0 ? 1 : -1));
             volumeSlider.updateSlider();
         }
-        if( raycastSlider.isMouseOver(mouseX, mouseY) ) {
-            raycastSlider.sliderValue += (delta > 0 ? 1 : -1);
+        if (raycastSlider.isMouseOver(mouseX, mouseY)) {
+            raycastSlider.sliderValue += (1f/(maxRaycastRange-1) * (delta > 0 ? 1 : -1));
             raycastSlider.updateSlider();
         }
-        if( verticalSlider.isMouseOver(mouseX, mouseY) ) {
-            verticalSlider.sliderValue += (delta > 0 ? 1 : -1);
+        if (verticalSlider.isMouseOver(mouseX, mouseY)) {
+            verticalSlider.sliderValue += (1f/maxVertical * (delta > 0 ? 1 : -1));
             verticalSlider.updateSlider();
         }
-        if( horizontalSlider.isMouseOver(mouseX, mouseY) ) {
-            horizontalSlider.sliderValue += (delta > 0 ? 1 : -1);
+        if (horizontalSlider.isMouseOver(mouseX, mouseY)) {
+            horizontalSlider.sliderValue += (1f/maxHorizontal * (delta > 0 ? 1 : -1));
             horizontalSlider.updateSlider();
+        }
+        if (collectedBlocksSlider.isMouseOver(mouseX, mouseY)) {
+            collectedBlocksSlider.sliderValue += (1f/maxCollectedBlocks * (delta > 0 ? 1 : -1));
+            collectedBlocksSlider.updateSlider();
         }
         return false;
     }
@@ -250,6 +259,9 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         }
         if (slider.equals(horizontalSlider)){
             this.horizontal = slider.getValueInt();
+        }
+        if (slider.equals(collectedBlocksSlider)) {
+            this.collectedBlocks = slider.getValueInt();
         }
     }
 
@@ -298,6 +310,10 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
             RenderSystem.color4f(1f, 1f, 1f, 1f);
             Minecraft.getInstance().getTextureManager().bind(this.texture);
             blit(stack, this.x+2, this.y+2, 0, 0, 16, 16, 16, 16);
+        }
+
+        public List<IReorderingProcessor> getTooltip() {
+            return LanguageMap.getInstance().getVisualOrder(Arrays.asList(this.getMessage(), new StringTextComponent("Enabled: " + this.isEnabled).withStyle(this.isEnabled ? TextFormatting.GREEN : TextFormatting.RED)));
         }
 
         public void setEnabled(boolean enable) { this.isEnabled = enable; }

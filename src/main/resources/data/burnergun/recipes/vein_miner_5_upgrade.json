@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ioi",
+    "ufu",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_block"
+    },
+    "u": {
+      "item": "minecraft:ender_pearl"
+    },
+    "f": {
+      "item": "burnergun:base_tier_5"
+    },
+    "g": {
+      "item": "minecraft:netherite_pickaxe"
+    },
+    "o": {
+      "item": "burnergun:vein_miner_4_upgrade"
+    }
+
+  },
+  "result":
+  {
+    "item": "burnergun:vein_miner_5_upgrade",
+    "count": 1
+  }
+}

@@ -49,6 +49,12 @@ public enum Upgrade {
     AMBIENCE_4("ambience_4", 1, 0, 1, 24, false),
     AMBIENCE_5("ambience_5", 1, 0, 1, 120, false),
 
+    VEIN_MINER_1("vein_miner_1", 1, 0, 1, 64*1, true),
+    VEIN_MINER_2("vein_miner_2", 2, 0, 1, 64*2, true),
+    VEIN_MINER_3("vein_miner_3", 3, 0, 1, 64*3, true),
+    VEIN_MINER_4("vein_miner_4", 4, 0, 1, 64*4, true),
+    VEIN_MINER_5("vein_miner_5", 5, 0, 1, 64*5, true),
+
     AUTO_FUEL("auto_fuel", -1, 0, 1, 0, true),
     UNIFUEL("unifuel", -1, 0, 1, 0, false),
     REACTOR("reactor", -1, 0, 1, 0, false),

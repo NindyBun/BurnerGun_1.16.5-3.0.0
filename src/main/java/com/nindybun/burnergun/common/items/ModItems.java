@@ -58,6 +58,12 @@ public class ModItems {
     public static final RegistryObject<Item> AMBIENCE_4 = UPGRADE_ITEMS.register("ambience_4", Upgrade.AMBIENCE_4::getCard);
     public static final RegistryObject<Item> AMBIENCE_5 = UPGRADE_ITEMS.register("ambience_5", Upgrade.AMBIENCE_5::getCard);
 
+    public static final RegistryObject<Item> VEIN_MINER_1 = UPGRADE_ITEMS.register("vein_miner_1_upgrade", Upgrade.VEIN_MINER_1::getCard);
+    public static final RegistryObject<Item> VEIN_MINER_2 = UPGRADE_ITEMS.register("vein_miner_2_upgrade", Upgrade.VEIN_MINER_2::getCard);
+    public static final RegistryObject<Item> VEIN_MINER_3 = UPGRADE_ITEMS.register("vein_miner_3_upgrade", Upgrade.VEIN_MINER_3::getCard);
+    public static final RegistryObject<Item> VEIN_MINER_4 = UPGRADE_ITEMS.register("vein_miner_4_upgrade", Upgrade.VEIN_MINER_4::getCard);
+    public static final RegistryObject<Item> VEIN_MINER_5 = UPGRADE_ITEMS.register("vein_miner_5_upgrade", Upgrade.VEIN_MINER_5::getCard);
+
     //public static final RegistryObject<Item> REACTOR = UPGRADE_ITEMS.register("reactor", Upgrade.REACTOR::getCard);
 
     public static final RegistryObject<Item> FORTUNE_1 = UPGRADE_ITEMS.register("fortune_1_upgrade", Upgrade.FORTUNE_1::getCard);

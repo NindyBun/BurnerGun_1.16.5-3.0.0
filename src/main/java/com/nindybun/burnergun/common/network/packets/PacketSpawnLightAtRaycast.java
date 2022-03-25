@@ -13,10 +13,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -54,8 +56,11 @@ public class PacketSpawnLightAtRaycast {
                     if (gun.getItem() instanceof BurnerGunMK1 && BurnerGunNBT.getFuelValue(gun) < Upgrade.LIGHT.getCost())
                         return;
                     BlockRayTraceResult ray = WorldUtil.getLookingAt(player.level, player, RayTraceContext.FluidMode.NONE, BurnerGunNBT.getRaycast(gun));
-                    BlockState state = player.level.getBlockState(ray.getBlockPos());
-                    if (state == Blocks.AIR.defaultBlockState() || state == Blocks.CAVE_AIR.defaultBlockState()) {
+                    BlockState state = player.level.getBlockState(ray.getBlockPos().relative(ray.getDirection()));
+                    if (!player.level.mayInteract(player, ray.getBlockPos())
+                            || !player.abilities.mayBuild)
+                        return;
+                    if (ray.getType() == RayTraceResult.Type.MISS) {
                         if (gun.getItem() instanceof BurnerGunMK1){
                             if (BurnerGunNBT.getFuelValue(gun) >= Upgrade.LIGHT.getCost())
                                 BurnerGunNBT.setFuelValue(gun, BurnerGunNBT.getFuelValue(gun)-Upgrade.LIGHT.getCost());
@@ -66,7 +71,12 @@ public class PacketSpawnLightAtRaycast {
                         player.level.setBlockAndUpdate(ray.getBlockPos(), ModBlocks.LIGHT.get().defaultBlockState());
                         return;
                     }
-                    if ((state != Blocks.AIR.defaultBlockState() || state != Blocks.CAVE_AIR.defaultBlockState()) && (player.level.getBlockState(ray.getBlockPos().relative(ray.getDirection())) == Blocks.AIR.defaultBlockState() || player.level.getBlockState(ray.getBlockPos().relative(ray.getDirection())) == Blocks.CAVE_AIR.defaultBlockState())){
+                    if ((ray.getType() == RayTraceResult.Type.BLOCK)
+                            && (state == Blocks.AIR.defaultBlockState()
+                            || state == Blocks.CAVE_AIR.defaultBlockState()
+                            || (state.getFluidState().isSource() && !state.hasProperty(BlockStateProperties.WATERLOGGED))
+                            || (state.getFluidState().getAmount() > 0 && !state.hasProperty(BlockStateProperties.WATERLOGGED)))
+                            ){
                         if (gun.getItem() instanceof BurnerGunMK1){
                             if (BurnerGunNBT.getFuelValue(gun) >= Upgrade.LIGHT.getCost())
                                 BurnerGunNBT.setFuelValue(gun, BurnerGunNBT.getFuelValue(gun)-Upgrade.LIGHT.getCost());

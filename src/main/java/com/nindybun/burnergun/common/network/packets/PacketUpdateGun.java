@@ -135,6 +135,16 @@ public class PacketUpdateGun {
                     BurnerGunNBT.setMaxHorizontal(gun, 0);
                 }
 
+                if (UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.VEIN_MINER_1)){
+                    Upgrade upgrade = UpgradeUtil.getUpgradeFromListByUpgrade(currentUpgrades, Upgrade.VEIN_MINER_1);
+                    if (BurnerGunNBT.getCollectedBlocks(gun) > (int)upgrade.getExtraValue())
+                        BurnerGunNBT.setCollectedBlocks(gun, (int)upgrade.getExtraValue());
+                    BurnerGunNBT.setMaxCollectedBlocks(gun, (int)upgrade.getExtraValue());
+                }else if (!UpgradeUtil.containsUpgradeFromList(currentUpgrades, Upgrade.VEIN_MINER_1)){
+                    BurnerGunNBT.setCollectedBlocks(gun, 1);
+                    BurnerGunNBT.setMaxCollectedBlocks(gun, 1);
+                }
+
                 currentUpgrades.forEach(upgrade -> {
                     if ((   upgrade.lazyIs(Upgrade.FORTUNE_1) && upgrade.isActive()
                             && currentUpgrades.contains(Upgrade.SILK_TOUCH)

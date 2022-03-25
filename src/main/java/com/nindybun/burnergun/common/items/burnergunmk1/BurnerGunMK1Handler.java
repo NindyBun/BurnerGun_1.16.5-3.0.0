@@ -31,10 +31,11 @@ public class BurnerGunMK1Handler extends ItemStackHandler {
             throw new IllegalArgumentException("Invalid slot number: " + slot);
         }
         if (slot == 0 ) {
-            if (    Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade())
-                    || isFuel(stack)
-                    || stack.getItem().equals(Items.BUCKET)){
+            if (isFuel(stack) || stack.getItem().equals(Items.BUCKET)){
                 return true;
+            }
+            if (stack.getItem() instanceof UpgradeCard){
+                return Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade());
             }
         }
         if (slot != 0 && stack.getItem() instanceof UpgradeCard

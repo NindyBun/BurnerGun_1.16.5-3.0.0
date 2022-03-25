@@ -20,6 +20,11 @@
   "item.burnergun.base_tier_4": "Base Tier 4",
   "item.burnergun.base_tier_5": "Base Tier 5",
 
+  "item.burnergun.vein_miner_1_upgrade": "Vein Miner 1x64",
+  "item.burnergun.vein_miner_2_upgrade": "Vein Miner 2x64",
+  "item.burnergun.vein_miner_3_upgrade": "Vein Miner 3x64",
+  "item.burnergun.vein_miner_4_upgrade": "Vein Miner 4x64",
+  "item.burnergun.vein_miner_5_upgrade": "Vein Miner 5x64",
   "item.burnergun.ambience_1": "Ambientic Generator 1",
   "item.burnergun.ambience_2": "Ambientic Generator 2",
   "item.burnergun.ambience_3": "Ambientic Generator 3",
@@ -63,6 +68,7 @@
   "tooltip.burnergun.reactor": "By slamming Hydrogen atoms together you get energy! And a lot of heat!",
 
   "tooltip.burnergun.magnet": "Transports block drops to your inventory.",
+  "tooltip.burnergun.vein_miner": "Mines veins of blocks.",
   "tooltip.burnergun.light": "Solidifies heat into a light source.",
   "tooltip.burnergun.focal_point": "Increases max reach to ",
   "tooltip.burnergun.horizontal_expansion": "Increases mining width to ",
@@ -97,6 +103,7 @@
   "tooltip.burnergun.screen.autofuel_filter": "AutoFuel Filter",
   "tooltip.burnergun.screen.upgradebag": "Upgrade Bag",
   "tooltip.burnergun.screen.openSettings": "Settings",
+  "tooltip.burnergun.screen.collectedBlocks": "Vein Mine: ",
 
   "item.burnergun.burnergun_mk1":  "Burner Gun MK1",
   "item.burnergun.burnergun_mk2": "Burner Gun MK2",
@@ -110,6 +117,7 @@
   "key.burnergun_gui_key": "Burner Gun Gui",
   "key.burnergun_light_key": "Shoot Light",
   "key.burnergun_lightplayer_key": "Spawn Light At Head",
-  "key.categories.burnergun": "Burner Gun"
+  "key.categories.burnergun": "Burner Gun",
+  "key.burnergun_veinminer_key": "Vein Miner"
 
 }

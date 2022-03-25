@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures":
+  {
+    "layer0": "burnergun:items/vein_miner_2_upgrade"
+  }
+}
