@@ -295,6 +295,12 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         }
 
         @Override
+        public boolean isMouseOver(double p_231047_1_, double p_231047_3_) {
+            LOGGER.info("s");
+            return super.isMouseOver(p_231047_1_, p_231047_3_);
+        }
+
+        @Override
         public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
             Color activeColor = this.isEnabled ? Color.GREEN : Color.RED;
 
@@ -310,10 +316,6 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
             RenderSystem.color4f(1f, 1f, 1f, 1f);
             Minecraft.getInstance().getTextureManager().bind(this.texture);
             blit(stack, this.x+2, this.y+2, 0, 0, 16, 16, 16, 16);
-        }
-
-        public List<IReorderingProcessor> getTooltip() {
-            return LanguageMap.getInstance().getVisualOrder(Arrays.asList(this.getMessage(), new StringTextComponent("Enabled: " + this.isEnabled).withStyle(this.isEnabled ? TextFormatting.GREEN : TextFormatting.RED)));
         }
 
         public void setEnabled(boolean enable) { this.isEnabled = enable; }

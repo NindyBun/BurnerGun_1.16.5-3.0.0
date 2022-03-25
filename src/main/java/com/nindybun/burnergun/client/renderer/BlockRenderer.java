@@ -2,6 +2,7 @@ package com.nindybun.burnergun.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.nindybun.burnergun.client.Keybinds;
 import com.nindybun.burnergun.common.BurnerGun;
 import com.nindybun.burnergun.common.items.BurnerGunNBT;
 import com.nindybun.burnergun.common.items.burnergunmk1.BurnerGunMK1;
@@ -69,18 +70,16 @@ public class BlockRenderer {
 
     public static void drawArea(ItemStack gun, PlayerEntity player, MatrixStack matrixStack){
         BlockRayTraceResult ray = WorldUtil.getLookingAt(player.level, player, RayTraceContext.FluidMode.NONE, BurnerGunNBT.getRaycast(gun));
-        if (player.level.getBlockState(ray.getBlockPos()) == Blocks.AIR.defaultBlockState())
+        if (ray.getType() == RayTraceResult.Type.MISS)
             return;
         int xRad = BurnerGunNBT.getHorizontal(gun);
         int yRad = BurnerGunNBT.getVertical(gun);
         BlockPos aimedPos = ray.getBlockPos();
-        if (ray.getType() != RayTraceResult.Type.BLOCK)
-            return;
         Vector3d size = WorldUtil.getDim(ray, xRad, yRad, player);
         float[] color = BurnerGunNBT.getColor(gun);
         drawBoundingBoxAtBlockPos(matrixStack, player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds(), color[0], color[1], color[2], 1.0F, aimedPos.relative(ray.getDirection()), aimedPos.relative(ray.getDirection()));
         drawBoundingBoxAtBlockPos(matrixStack, player.level.getBlockState(aimedPos).getShape(player.level, aimedPos, ISelectionContext.of(player)).bounds(), color[0], color[1], color[2], 1.0F, aimedPos, aimedPos.relative(ray.getDirection()));
-        if (player.isCrouching())
+        if (player.isCrouching() || Keybinds.burnergun_veinMiner_key.isDown())
             return;
         for (int xPos = aimedPos.getX() - (int)size.x(); xPos <= aimedPos.getX() + (int)size.x(); ++xPos){
             for (int yPos = aimedPos.getY() - (int)size.y(); yPos <= aimedPos.getY() + (int)size.y(); ++yPos){

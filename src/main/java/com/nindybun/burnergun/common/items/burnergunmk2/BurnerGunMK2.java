@@ -153,19 +153,21 @@ public class BurnerGunMK2 extends Item {
     }
 
     public void mineVein(World world, BlockRayTraceResult ray, List<BlockPos> blockPosList, List<BlockPos> minedBlockList, int count, ItemStack gun, List<Upgrade> activeUpgrades, List<Item> smeltFilter, List<Item> trashFilter, PlayerEntity player){
-        if (blockPosList.isEmpty() || count <= 0)
+        if (blockPosList.isEmpty())
             return;
         BlockState blockState = world.getBlockState(blockPosList.get(0));
         BlockPos blockPos = blockPosList.get(0);
         blockPosList.remove(0);
         minedBlockList.add(blockPos);
-        count -= 1;
 
         if (canMine(world, blockPos, blockState, player)){
             blockPosList = UpgradeUtil.collectBlocks(minedBlockList, blockPosList, blockPos, blockState.getBlock().defaultBlockState(), world);
             mineBlock(world, ray, gun, activeUpgrades, smeltFilter, trashFilter, blockPos, blockState, player, true);
         }
 
+        count -= 1;
+        if (count <= 0)
+            return;
         mineVein(world, ray, blockPosList, minedBlockList, count, gun, activeUpgrades, smeltFilter, trashFilter, player);
     }
 
@@ -204,7 +206,7 @@ public class BurnerGunMK2 extends Item {
                    List<BlockPos> blocks = new ArrayList<>();
                    blocks.add(blockPos);
                    mineVein(world, blockRayTraceResult, blocks, new ArrayList<>(), BurnerGunNBT.getCollectedBlocks(gun), gun, activeUpgrades, BurnerGunNBT.getSmeltFilter(gun), BurnerGunNBT.getTrashFilter(gun), player);
-               }if (player.isCrouching())
+               }else if (player.isCrouching())
                    mineBlock(world, blockRayTraceResult, gun, activeUpgrades, smeltFilter, trashFilter, blockPos, blockState, player, false);
                else
                    mineArea(world, blockRayTraceResult, gun, activeUpgrades, smeltFilter, trashFilter, blockPos, player);
