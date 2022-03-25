@@ -164,7 +164,7 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         settings.add(raycastSlider = new Slider(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.raycast"), new StringTextComponent(""), 1, maxRaycastRange, raycastRange, false, true, slider -> {}, this));
         settings.add(verticalSlider = new Slider(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.vertical"), new StringTextComponent(""), 0, maxVertical, vertical, false, true, slider -> {}, this));
         settings.add(horizontalSlider = new Slider(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.horizontal"), new StringTextComponent(""), 0, maxHorizontal, horizontal, false, true, slider -> {}, this));
-        settings.add(collectedBlocksSlider = new Slider(midX - 140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.collectedBlocks"), new StringTextComponent(""), 0, maxCollectedBlocks, collectedBlocks, false, true, slider -> {}, this));
+        settings.add(collectedBlocksSlider = new Slider(midX - 140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.collectedBlocks"), new StringTextComponent(" block(s)"), 0, maxCollectedBlocks, collectedBlocks, false, true, slider -> {}, this));
         settings.add(colorButton = new Button(midX-140, 0, 125, 20, new TranslationTextComponent("tooltip." + BurnerGun.MOD_ID + ".screen.color"), button -> {
             ModScreens.openColorScreen(gun);
         }));
@@ -221,7 +221,7 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
             horizontalSlider.updateSlider();
         }
         if (collectedBlocksSlider.isMouseOver(mouseX, mouseY)) {
-            collectedBlocksSlider.sliderValue += (1f/maxCollectedBlocks * (delta > 0 ? 1 : -1));
+            collectedBlocksSlider.sliderValue += (1f/(maxCollectedBlocks) * (delta > 0 ? 1 : -1));
             collectedBlocksSlider.updateSlider();
         }
         return false;

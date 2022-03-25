@@ -50,6 +50,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -164,22 +165,18 @@ public class BurnerGunMK1 extends Item{
     }
 
     public void mineVein(World world, BlockRayTraceResult ray, List<BlockPos> blockPosList, List<BlockPos> minedBlockList, int count, ItemStack gun, List<Upgrade> activeUpgrades, List<Item> smeltFilter, List<Item> trashFilter, PlayerEntity player){
-        if (blockPosList.isEmpty())
+        if (blockPosList.isEmpty() || count <= 0)
             return;
         BlockState blockState = world.getBlockState(blockPosList.get(0));
         BlockPos blockPos = blockPosList.get(0);
         blockPosList.remove(0);
         minedBlockList.add(blockPos);
+        count -= 1;
 
         if (canMine(gun, world, blockPos, blockState, player, activeUpgrades)){
             blockPosList = UpgradeUtil.collectBlocks(minedBlockList, blockPosList, blockPos, blockState.getBlock().defaultBlockState(), world);
             mineBlock(world, ray, gun, activeUpgrades, smeltFilter, trashFilter, blockPos, blockState, player, true);
         }
-
-        count -= 1;
-        if (count <= 0)
-            return;
-
         mineVein(world, ray, blockPosList, minedBlockList, count, gun, activeUpgrades, smeltFilter, trashFilter, player);
     }
 
@@ -265,7 +262,11 @@ public class BurnerGunMK1 extends Item{
             if (canMine(gun, world, blockPos, blockState, player, activeUpgrades)){
                 gun.enchant(Enchantments.BLOCK_FORTUNE, UpgradeUtil.containsUpgradeFromList(activeUpgrades, Upgrade.FORTUNE_1) ? UpgradeUtil.getUpgradeFromListByUpgrade(activeUpgrades, Upgrade.FORTUNE_1).getTier() : 0);
                 gun.enchant(Enchantments.SILK_TOUCH, UpgradeUtil.containsUpgradeFromList(activeUpgrades, Upgrade.SILK_TOUCH) ? 1 : 0);
-                if (player.isCrouching())
+                if (UpgradeUtil.containsUpgradeFromList(activeUpgrades, Upgrade.VEIN_MINER_1) && Keybinds.burnergun_veinMiner_key.isDown()){
+                    List<BlockPos> blocks = new ArrayList<>();
+                    blocks.add(blockPos);
+                    mineVein(world, blockRayTraceResult, blocks, new ArrayList<>(), BurnerGunNBT.getCollectedBlocks(gun), gun, activeUpgrades, BurnerGunNBT.getSmeltFilter(gun), BurnerGunNBT.getTrashFilter(gun), player);
+                }if (player.isCrouching())
                     mineBlock(world, blockRayTraceResult, gun, activeUpgrades, smeltFilter, trashFilter, blockPos, blockState, player, false);
                 else
                     mineArea(world, blockRayTraceResult, gun, activeUpgrades, smeltFilter, trashFilter, blockPos, blockState, player);
