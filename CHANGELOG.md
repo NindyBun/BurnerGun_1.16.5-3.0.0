@@ -44,6 +44,9 @@
 - Blaze cage captured pigs, now it captures Blazes
 ### v3.2.0
 - Ported the 1.18.1 version to here
-## v3.3.0
+### v3.3.0
 - Ported 1.18.1-4.1.1 version to here
 - Fixed upgrade toggling
+### v1.16.5-3.4.0
+- Added Vein Mining Upgrades
+- Fixed some minor code
