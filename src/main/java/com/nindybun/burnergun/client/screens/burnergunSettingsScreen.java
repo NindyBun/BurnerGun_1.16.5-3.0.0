@@ -295,12 +295,6 @@ public class burnergunSettingsScreen extends Screen implements Slider.ISlider {
         }
 
         @Override
-        public boolean isMouseOver(double p_231047_1_, double p_231047_3_) {
-            LOGGER.info("s");
-            return super.isMouseOver(p_231047_1_, p_231047_3_);
-        }
-
-        @Override
         public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
             Color activeColor = this.isEnabled ? Color.GREEN : Color.RED;
 
