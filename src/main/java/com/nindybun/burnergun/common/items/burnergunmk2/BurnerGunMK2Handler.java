@@ -27,13 +27,33 @@ public class BurnerGunMK2Handler extends ItemStackHandler {
         if (slot < 0 || slot >= MAX_SLOTS) {
             throw new IllegalArgumentException("Invalid slot number: " + slot);
         }
-        /*if (    !(stack.getItem() instanceof UpgradeCard)
-                || (Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade())))
-            return false;*/
-        if (stack.getItem() instanceof UpgradeCard){
-            return !Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade());
+        if (stack.getItem() instanceof UpgradeCard
+                && !(Upgrade.AMBIENCE_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade()))
+                && !(Upgrade.FUEL_EFFICIENCY_1.lazyIs(((UpgradeCard) stack.getItem()).getUpgrade()))
+                && getUpgradeByUpgrade(((UpgradeCard) stack.getItem()).getUpgrade()) == null){
+            return true;
         }
         return false;
+    }
+
+    public List<UpgradeCard> getUpgrades(){
+        List<UpgradeCard> upgrades = new ArrayList<>();
+        for (int index  = 1; index < MAX_SLOTS; index++){
+            if (this.getStackInSlot(index).getItem() != Items.AIR){
+                upgrades.add((UpgradeCard)this.getStackInSlot(index).getItem());
+            }
+        }
+        return upgrades;
+    }
+
+    public Upgrade getUpgradeByUpgrade(Upgrade upgrade){
+        List<UpgradeCard> upgrades = getUpgrades();
+        for (UpgradeCard upgradeCard : upgrades) {
+            if (upgradeCard.getUpgrade().getBaseName().equals(upgrade.getBaseName())){
+                return upgradeCard.getUpgrade();
+            }
+        }
+        return null;
     }
 
     @Override
